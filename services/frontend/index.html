@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&family=Unbounded:wght@600&display=swap"
+        rel="stylesheet">
+    <title>FilmBuddy</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+
+<body>
+    <navbar id="navbar" class="hidden">
+        <div class="navbar__content">
+            <a class="navbar__content__search" data-page="search">Поиск</a>
+            <a class="navbar__content__recomendation" data-page="recomendation">Рекомендации</a>
+            <a class="navbar__content__notice" data-page="notice">Уведомления</a>
+            <a class="navbar__content__profile" data-page="profile">Профиль</a>
+            <a class="navbar__content__friends" data-page="friends">Друзья</a>
+        </div>
+    </navbar>
+    <main id="main-content">
+    </main>
+
+    <script src="js/mock-api.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/search.js"></script>
+    <script src="js/friends.js"></script>
+    <script src="js/notice.js"></script>
+    <script src="js/profile.js"></script>
+    <script src="js/recomendation.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/main.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,17 @@
+:root {
+    --dark-grey: #161514;
+    --green-yellow: #CEF431;
+    --light-grey: #EAF4F4;
+    --dark-turquoise: #014651;
+    --blue-grey: #8DAEB3;
+    --green: #03D26F;
+
+    --text-font-family: "Geologica", sans-serif;
+    --title-font-family: "Unbounded", sans-serif;
+
+    --font-logo: 600 48px var(--title-font-family);
+    --font-title: 600 40px var(--title-font-family);
+    --font-text: 300 16px var(--text-font-family);
+    --font-button: 300 18px var(--text-font-family);
+    --font-button-sec: 300 16px var(--text-font-family);
+}
