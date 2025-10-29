@@ -1,11 +1,19 @@
 @import url("variables.css");
 @import url("auth.css");
+@import url("temp-notice.css");
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+body {
     background-color: var(--dark-grey);
+}
+
+[data-page] {
+    cursor: pointer;
 }
 
 .hidden {

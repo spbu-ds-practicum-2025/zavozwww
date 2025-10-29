@@ -25,24 +25,27 @@ class Api {
             if(response.ok){
                 return data;
             } else {
-                throw new Error(`Error: ${response.status}, ${response.statusText}` || "Server error");
+                throw response;
             }
         } catch(error){
-            throw new Error(error.message || "Network error");
+            if(error.status != 401){
+                throw new Error("Network error");
+            }
+            throw new Error(error.statusText);
         }
     }
 
-    async login(username, password){
+    async login(Username, Password){
         return this.request("/login", {
             method: "POST",
-            body: JSON.stringify({ username, password })
+            body: JSON.stringify({ username: Username, password: Password })
         });
     }
 
-    async registration(username, email, password){
+    async registration(Username, Email, Password){
         return this.request("/register", {
             method: "POST",
-            body: JSON.stringify({ email, username, password })
+            body: JSON.stringify({ email: Email, username: Username, password: Password })
         });
     }
 
@@ -50,12 +53,29 @@ class Api {
         return this.request(`/search?query=${encodeURIComponent(searchQuery)}&genre=${genre}`);
     }
 
-    async rating(rating, message){
-        return this.request(`/movies/${id}/rating`, {
+    async rating(ID, Rating, Message){
+        return this.request(`/movies/${ID}/rating`, {
                     method: "POST",
-                    body: JSON.stringify({rating, message}),
-                    headers: { "Content-Type": "application/json" }
+                    body: JSON.stringify({ movie_id: ID, rating: Rating, message: Message }),
                 });
+    }
+
+    async recomendation() {
+        return this.request("/recomendations");
+    }
+
+    async searchFriend(Name){
+        return this.request("/friends/request", {
+            method: "POST",
+            body: JSON.stringify({ target_username: Name }),
+        })
+    }
+
+    async addFriend(Name) {
+        return this.request("/friends/add", {
+           method: "POST",
+           body: JSON.stringify({userName: Name})
+       });
     }
 }
 

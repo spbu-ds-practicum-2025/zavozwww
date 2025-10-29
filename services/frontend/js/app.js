@@ -1,6 +1,6 @@
 class App {
     constructor(){
-        this.currentPage = "films";
+        this.currentPage = localStorage.getItem("currentPage") || "search";
         this.token = localStorage.getItem("token");
         this.init();
     }
@@ -12,16 +12,21 @@ class App {
                 this.loadPages(event.target.dataset.page);
             }
         });
+
+        if (this.token) {
+            this.loadPages(this.currentPage);
+        }
     }
 
     loadPages(name){
+        this.currentPage = name;
+        localStorage.setItem('currentPage', name);
         switch(name){
             case "search":
                 searchManager.render();
                 break;
             case "recomendation":
-                //recomendationManager.render();
-                this.renderRecommendationsPage();
+                recomendationManager.render();
                 break;
             case "notice":
                 //noticeManager.render();

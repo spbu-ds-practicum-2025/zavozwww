@@ -1,0 +1,30 @@
+.temp-notice {
+    position: fixed;
+    z-index: 1000;
+
+    top: 20px;
+    right: 20px;
+    background-color: var(--light-grey);
+    border-radius: 8px;
+    transform: translateX(400px);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.temp-notice.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.temp-notice.hide {
+    transform: translateX(400px);
+    opacity: 0;
+}
+
+.temp-notice.success {
+    border-left: 4px solid green;
+}
+
+.temp-notice.error {
+    border-left: 4px solid red;
+}

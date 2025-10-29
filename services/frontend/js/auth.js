@@ -99,10 +99,13 @@ class AuthManager {
                 document.getElementById("navbar").classList.remove("hidden");
                 app.loadPages("search");
             } catch(error){
-                console.log(error.message);
+                if(error.message != "Network error"){
+                    tempNotice.error("Ошибка, неверный логин или пароль");
+                } else {
+                    tempNotice.error("Ошибка сервера, повторите попытку немного позже");
+                    console.log(error.message);
+                }
             }
-        } else {
-            alert("Пожалуйста, заполните все поля");
         }
     }
 
@@ -118,14 +121,20 @@ class AuthManager {
             try{
                 let data = await api.registration(username, email, password);
                 this.token = data.token;
+                localStorage.setItem("token", data.token);
 
                 document.getElementById("navbar").classList.remove("hidden");
                 app.loadPages("search");
             } catch(error) {
-                console.log(error.message);
+                if(error.message != "Network error"){
+                    tempNotice.error("Ошибка, проверьте еще раз введенные данные");
+                } else {
+                    tempNotice.error("Ошибка сервера, повторите попытку немного позже");
+                    console.log(error.message);
+                }   
             }
         } else {
-            alert("Пожалуйста, заполните все поля");
+            tempNotice.error("Пожалуйста, заполните все поля");
         }
     }
 }
