@@ -1,0 +1,9 @@
+server:
+  host: localhost
+  port: 8080
+logging:
+  level: DEBUG
+  format: text
+database:
+  host: localhost 
+  port: 5432
