@@ -2,10 +2,17 @@
     position: fixed;
     z-index: 1000;
 
+    display: flex;
+    align-items: center;
+    height: 40px;
     top: 20px;
     right: 20px;
+    padding: 0px 5px;
+
+    font: var(--font-text);
     background-color: var(--light-grey);
     border-radius: 8px;
+
     transform: translateX(400px);
     opacity: 0;
     transition: all 0.3s ease;
@@ -22,9 +29,9 @@
 }
 
 .temp-notice.success {
-    border-left: 4px solid green;
+    border-left: 8px solid var(--green-yellow);
 }
 
 .temp-notice.error {
-    border-left: 4px solid red;
+    border-left: 8px solid var(--error-red);
 }

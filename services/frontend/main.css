@@ -1,10 +1,13 @@
 @import url("variables.css");
-@import url("auth.css");
-@import url("temp-notice.css");
+@import url("modules/auth/auth.css");
+@import url("modules/search/search.css");
+@import url("modules/recomendation/recomendation.css");
+@import url("modules/temp-notice/temp-notice.css");
+@import url("modules/navbar/navbar.css");
 
 * {
-    margin: 0;
     padding: 0;
+    margin: 0;
     box-sizing: border-box;
 }
 

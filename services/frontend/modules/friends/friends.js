@@ -37,7 +37,8 @@ class FriendsManager {
     }
 
     renderYourFriends(){
-        let friends = AuthManager.currentUser.friends;
+        this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
+        let friends = this.currentUser.friends;
 
         const yourFriends = document.getElementById("friends");
 

@@ -1,0 +1,92 @@
+@import url("../movie-card/movie-card.css");
+@import url("../rate/rate.css");
+
+.search-page {
+    margin: 0px 64px;
+}
+
+.search-page__title {
+    color: var(--light-grey);
+    font: var(--font-title);
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+}
+
+.search-box {
+    display: flex;
+    gap: 3dvw;
+    justify-content: space-between;
+}
+
+.search-box__input {
+    display: block;
+    width: 100%;
+    height: calc(2.5em + 2px);
+    padding: 0.7em;
+    font: var(--font-text);
+    color: var(--light-grey);
+    background-color: var(--grey);
+    border-radius: 0.65em;
+    margin-bottom: 1em;
+}
+
+.search-box__button {
+    width: 10em;
+    height: calc(2.25em + 2px);
+    padding: 0.7em;
+    font: var(--font-button);
+    color: var(--light-grey);
+    background-color: var(--blue-grey);
+    border-radius: 0.65em;
+    margin-bottom: 0.9em;
+    cursor: pointer;
+}
+
+.filters {
+    width: 15em;
+    height: calc(2.5em + 2px);
+    padding: 0.7em;
+    font: var(--font-text);
+    color: var(--light-grey);
+    background-color: var(--grey);
+    border: none;
+    border-radius: 0.65em;
+    cursor: pointer;
+
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+/* For IE <= 11 */
+.filters::-ms-expand {
+    display: none;
+}
+
+.search-box__filters {
+    position: relative;
+    margin-bottom: 1em;
+}
+
+.select-icon {
+    position: absolute;
+    height: 1em;
+    width: 1em;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 0.5em;
+    stroke: var(--light-grey)
+}
+
+.search-page__result {
+    font: var(--font-text);
+    color: var(--light-grey);
+}
+
+.results {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 3dvw;
+    row-gap: 1.5dvw;
+    justify-content: space-between;
+}

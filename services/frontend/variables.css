@@ -3,15 +3,19 @@
     --green-yellow: #CEF431;
     --light-grey: #EAF4F4;
     --dark-turquoise: #014651;
-    --blue-grey: #8DAEB3;
-    --green: #03D26F;
+    --grey: #2A2827;
+    --blue-grey: #494B41;
+    --error-red: #FA1E17;
+    --yellow: #F4C631;
 
     --text-font-family: "Geologica", sans-serif;
     --title-font-family: "Unbounded", sans-serif;
 
-    --font-logo: 600 48px var(--title-font-family);
-    --font-title: 600 40px var(--title-font-family);
+    --font-logo-auth: 600 48px var(--title-font-family);
+    --font-logo: 600 40px var(--title-font-family);
+    --font-title: 600 36px var(--title-font-family);
     --font-text: 300 16px var(--text-font-family);
+    --font-extra-text: 100 16px var(--text-font-family);
     --font-button: 300 18px var(--text-font-family);
     --font-button-sec: 300 16px var(--text-font-family);
 }

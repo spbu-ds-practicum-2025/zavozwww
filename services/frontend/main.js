@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-     const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
     
     if (token) {
         document.getElementById("navbar").classList.remove("hidden");

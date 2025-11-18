@@ -12,7 +12,7 @@ class AuthManager {
         <div class="auth">
             <img src="assets/auth-img.jpg" class="auth__image" />
             <div class="auth__block">
-                <h1 class="logo">FILMBUDDY</h1>
+                <h1 class="logo_auth">FILMBUDDY</h1>
                 <h2>Сперва войдите в свой аккаунт</h2>
                 <form id="login-form" class="auth__form">
                     <div class="auth__form__group">
@@ -38,7 +38,7 @@ class AuthManager {
         <div class="auth">
             <img src="assets/auth-img.jpg" class="auth__image" />
             <div class="auth__block">
-                <h1 class="logo">FILMBUDDY</h1>
+                <h1 class="logo_auth">FILMBUDDY</h1>
                 <h2>Регистрация</h2>
                 <form id="reg-form" class="auth__form">
                     <div class="auth__form__group">
@@ -93,9 +93,9 @@ class AuthManager {
             try {
                 let data = await api.login(username, password);
                 localStorage.setItem("token", data.token);
+                localStorage.setItem("currentUser", JSON.stringify(data.user_profile));
                 this.token = data.token;
                 this.currentUser = data.user_profile;
-                
                 document.getElementById("navbar").classList.remove("hidden");
                 app.loadPages("search");
             } catch(error){
@@ -122,7 +122,7 @@ class AuthManager {
                 let data = await api.registration(username, email, password);
                 this.token = data.token;
                 localStorage.setItem("token", data.token);
-
+                this.currentUser = data.user_profile;
                 document.getElementById("navbar").classList.remove("hidden");
                 app.loadPages("search");
             } catch(error) {

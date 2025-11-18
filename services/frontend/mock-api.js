@@ -18,7 +18,10 @@ window.fetch = async function(...args) {
           id: 1,
           username: body.username,
           email: 'test@mail.com',
-          friends: []
+          friends: [],
+          regDate: '12.12.2012',
+          countRateFilms: 12,
+          countFriends: 100
         }
       }), { status: 200 })
     } else {
@@ -36,15 +39,37 @@ window.fetch = async function(...args) {
         id: 1,
         title: "Интерстеллар",
         imageSrc: "https://clck.ru/3Q3i7R",
+        genres: "триллер, научная фантастика",
+        year: 2014,
         rating: 4.8,
         countRaitings: 1500
       },
       {
         id: 2, 
         title: "Начало",
+        year: 2010,
         imageSrc: "https://clck.ru/3Q3i7u",
+        genres: "триллер, боевик",
         rating: 4.7,
         countRaitings: 1200
+      },
+      {
+        id: 3,
+        title: "Матрица",
+        year: 1999,
+        imageSrc: "https://clck.ru/3Q3i9s",
+        genres: "боевик, научная фантастика, триллер",
+        rating: 4.6,
+        countRaitings: 2000
+      },
+      {
+        id: 4,
+        title: "Крестный отец",
+        year: 1972,
+        imageSrc: "https://clck.ru/3Q3iAB",
+        genres: "боевик",
+        rating: 4.9,
+        countRaitings: 1800
       }
     ]
     
@@ -56,14 +81,18 @@ window.fetch = async function(...args) {
       {
         id: 3,
         title: "Матрица",
+        year: 1999,
         imageSrc: "https://clck.ru/3Q3i9s",
+        genres: "боевик, научная фантастика, триллер",
         rating: 4.6,
         countRaitings: 2000
       },
       {
         id: 4,
         title: "Крестный отец",
+        year: 1972,
         imageSrc: "https://clck.ru/3Q3iAB",
+        genres: "боевик",
         rating: 4.9,
         countRaitings: 1800
       }

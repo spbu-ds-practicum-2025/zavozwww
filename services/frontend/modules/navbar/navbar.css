@@ -1,0 +1,15 @@
+.navbar__content {
+    display: flex;
+
+    justify-content: space-between;
+    margin: 24px 64px 12px;
+}
+
+.navbar__content__pages {
+    display: flex;
+    align-items: center;
+    gap: 3.5em;
+
+    color: var(--light-grey);
+    font: var(--font-button);
+}

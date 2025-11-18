@@ -8,35 +8,39 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&family=Unbounded:wght@600&display=swap"
         rel="stylesheet">
-    <title>FilmBuddy</title>
-    <link rel="stylesheet" href="styles/main.css">
+    <title>FilmBuddy - поможем с выбором кино</title>
+    <link rel="stylesheet" href="main.css">
 </head>
 
 <body>
     <navbar id="navbar" class="hidden">
         <div class="navbar__content">
-            <a class="navbar__content__search" data-page="search">Поиск</a>
-            <a class="navbar__content__recomendation" data-page="recomendation">Рекомендации</a>
-            <a class="navbar__content__notice" data-page="notice">Уведомления</a>
-            <a class="navbar__content__profile" data-page="profile">Профиль</a>
-            <a class="navbar__content__friends" data-page="friends">Друзья</a>
+            <h1 class="logo">FILMBUDDY</h1>
+            <div class="navbar__content__pages">
+                <a class="navbar__content__pages__search" data-page="search">Поиск</a>
+                <a class="navbar__content__pages__recomendation" data-page="recomendation">Рекомендации</a>
+                <a class="navbar__content__pages__friends" data-page="friends">Друзья</a>
+                <a class="navbar__content__pages__notice" data-page="notice">Уведомления</a>
+                <a class="navbar__content__pages__profile" data-page="profile">Профиль</a>
+            </div>
         </div>
     </navbar>
     <main id="main-content">
     </main>
 
 
-    <script src="js/temp-notice.js"></script>
-    <script src="js/mock-api.js"></script>
-    <script src="js/api.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/search.js"></script>
-    <script src="js/friends.js"></script>
-    <script src="js/notification.js"></script>
-    <script src="js/profile.js"></script>
-    <script src="js/recomendation.js"></script>
-    <script src="js/app.js"></script>
-    <script src="js/main.js"></script>
+    <script src="modules/temp-notice/temp-notice.js"></script>
+    <script src="modules/profile/profile.js"></script>
+    <script src="mock-api.js"></script>
+    <script src="api.js"></script>
+    <script src="modules/auth/auth.js"></script>
+    <script src="modules/film/film.js"></script>
+    <script src="modules/search/search.js"></script>
+    <script src="modules/recomendation/recomendation.js"></script>
+    <script src="modules/friends/friends.js"></script>
+    <script src="otherJS/notification.js"></script>
+    <script src="app.js"></script>
+    <script src="main.js"></script>
 
 </body>
 

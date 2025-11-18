@@ -56,7 +56,7 @@ class Api {
     async rating(ID, Rating, Message){
         return this.request(`/movies/${ID}/rating`, {
                     method: "POST",
-                    body: JSON.stringify({ movie_id: ID, rating: Rating, message: Message }),
+                    body: JSON.stringify({ rating: Rating, review: Message }),
                 });
     }
 

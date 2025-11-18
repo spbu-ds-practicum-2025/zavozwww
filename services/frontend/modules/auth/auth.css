@@ -9,6 +9,12 @@
     padding-bottom: 1.5em;
 }
 
+.logo_auth {
+    font: var(--font-logo);
+    color: var(--green-yellow);
+    font-size: 3em;
+}
+
 .auth__block {
     width: 50dvw;
     display: flex;
@@ -28,7 +34,7 @@
     flex-direction: column;
     align-items: center;
     width: 70%;
-    background-color: var(--light-grey);
+    background-color: var(--grey);
     border-radius: 20px;
     height: auto;
     padding: 40px;
@@ -40,15 +46,15 @@
     height: calc(2.5em + 2px);
     padding: 0.7em;
     font: var(--font-text);
-    background-color: var(--light-grey);
-    border: 1px solid var(--dark-turquoise);
+    border: 1px solid var(--light-grey);
     border-radius: 0.65em;
 
     margin-bottom: 1.5em;
 }
 
-.auth__form__group input::placeholder {
-    color: var(--blue-grey);
+.auth__form__group input,
+input::placeholder {
+    color: var(--light-grey);
 }
 
 .auth__form__button {
@@ -59,8 +65,8 @@
     color: var(--light-grey);
     background-color: var(--blue-grey);
     border-radius: 0.65em;
-
     margin-bottom: 0.75em;
+    cursor: pointer;
 }
 
 .auth__form__button_sec {
@@ -68,8 +74,8 @@
     height: calc(1.75em + 2px);
     padding: 0.2em 0.7em;
     font: var(--font-button-sec);
-    color: var(--dark-turquoise);
-    background-color: var(--light-grey);
-    border: 1px solid var(--dark-turquoise);
+    color: var(--light-grey);
+    border: 1px solid var(--light-grey);
     border-radius: 0.65em;
+    cursor: pointer;
 }

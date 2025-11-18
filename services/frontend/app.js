@@ -2,6 +2,8 @@ class App {
     constructor(){
         this.currentPage = localStorage.getItem("currentPage") || "search";
         this.token = localStorage.getItem("token");
+        const userData = localStorage.getItem("currentUser");
+        this.currentUser = userData ? JSON.parse(userData) : null;
         this.init();
     }
 
@@ -33,21 +35,13 @@ class App {
                 this.renderNotificationsPage()
                 break;
             case "profile":
-                //profileManager.render();
-                this.renderProfilePage();
+                profileManager.render();
+                //this.renderProfilePage();
                 break;
             case "friends":
-                //friendsManager.render();
-                this.renderFriendsPage();
+                friendsManager.render();
                 break;
         }
-    }
-
-    renderRecommendationsPage() {
-        document.getElementById("main-content").innerHTML = `
-            <h1>Рекомендации</h1>
-            <p>Страница рекомендаций в разработке</p>
-        `;
     }
 
     renderNotificationsPage() {
@@ -61,13 +55,6 @@ class App {
         document.getElementById("main-content").innerHTML = `
             <h1>Профиль</h1>
             <p>Страница профиля в разработке</p>
-        `;
-    }
-
-    renderFriendsPage() {
-        document.getElementById("main-content").innerHTML = `
-            <h1>Друзья</h1>
-            <p>Страница друзей в разработке</p>
         `;
     }
 }

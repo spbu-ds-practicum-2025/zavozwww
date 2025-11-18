@@ -32,4 +32,4 @@ class TemporaryNotice {
     }
 }
 
-let tempNotice = new TemporaryNotice();
+const tempNotice = new TemporaryNotice();
