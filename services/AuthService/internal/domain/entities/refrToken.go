@@ -1,21 +1,22 @@
-// Пакет entities содержит определение структуры RefreshToken для управления токенами обновления.
 package entities
 
 import (
 	"fmt"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 // RefreshToken представляет собой токен обновления для поддержания сессии пользователя.
 type RefreshToken struct {
-	ID        int64
-	UserID    int64     `json:"user_id"`
+	ID        int64     `json:"-"`
+	UserID    uuid.UUID `json:"user_id"`
 	Token     string    `json:"token"`
 	ExpiresAt time.Time `json:"expires_at"`
 }
 
 // NewRefreshToken создает новый токен обновления с заданными параметрами.
-func NewRefreshToken(id int64, userID int64, token string, expiresAt time.Time) *RefreshToken {
+func NewRefreshToken(id int64, userID uuid.UUID, token string, expiresAt time.Time) *RefreshToken {
 	return &RefreshToken{
 		ID:        id,
 		UserID:    userID,

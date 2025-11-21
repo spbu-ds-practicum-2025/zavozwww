@@ -1,19 +1,25 @@
-// В этом пакете отображаются основные сущности нашего сервиса регитрации и аутентификации пользователей.
 package entities
 
 import (
+	"crypto/rand" // ИСПРАВЛЕНО: Используем crypto/rand вместо math/rand
+	"fmt"
+	"io"
 	"time"
 
+	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 )
 
 // User представляет собой пользователя в системе.
 type User struct {
-	ID             int64
-	Username       string `json:"username"`
-	Email          string `json:"email"`
-	PasswordHash   string `json:"password_hash"`
-	DateOfRegister string `json:"date_of_register"`
+	ID                 uuid.UUID `json:"id"`
+	Username           string    `json:"username"`
+	Email              string    `json:"email"`
+	PasswordHash       string    `json:"-"`
+	CreatedAt          string    `json:"created_at"`
+	VerificationCode   string    `json:"-"`
+	IsVerified         bool      `json:"is_verified"`
+	VerificationSentAt time.Time `json:"verification_sent_at"`
 }
 
 // String возвращает строковое представление пользователя.
@@ -29,9 +35,10 @@ func (u *User) ComparePassword(password string) bool {
 
 // SetPassword устанавливает хеш пароля для пользователя.
 func (u *User) SetPassword(password string) error {
+	const op = "entities.User.SetPassword"
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
-		return err
+		return fmt.Errorf("%s: %s", op, err.Error())
 	}
 	u.PasswordHash = string(hash)
 	return nil
@@ -39,17 +46,39 @@ func (u *User) SetPassword(password string) error {
 
 // NewUser создает нового пользователя, хешируя его пароль.
 func NewUser(username, email, password string) (*User, error) {
+	const op = "entities.NewUser"
+	verificationCode, err := GenerateVerificationCode()
+	if err != nil {
+		return nil, fmt.Errorf("%s: %s", op, err.Error())
+	}
 	user := &User{
-		Username:       username,
-		Email:          email,
-		DateOfRegister: time.Now().Format(time.RFC3339),
+		ID:               uuid.New(), // Добавил генерацию ID здесь
+		Username:         username,
+		Email:            email,
+		CreatedAt:        time.Now().Format(time.RFC3339),
+		IsVerified:       false,
+		VerificationCode: verificationCode,
 	}
 
 	if err := user.SetPassword(password); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("%s: %s", op, err.Error())
 	}
 
 	return user, nil
+}
+
+func GenerateVerificationCode() (string, error) {
+	const codeLength = 5
+	var table = [...]byte{'1', '2', '3', '4', '5', '6', '7', '8', '9', '0'}
+	b := make([]byte, codeLength)
+	n, err := io.ReadAtLeast(rand.Reader, b, codeLength)
+	if n != codeLength {
+		return "", fmt.Errorf("failed to generate random bytes for code: %w", err)
+	}
+	for i := 0; i < len(b); i++ {
+		b[i] = table[int(b[i])%len(table)]
+	}
+	return string(b), nil
 }
 
 //TODO

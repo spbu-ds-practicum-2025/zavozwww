@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.Subject}}</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f4f7;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+        .header {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .header h1 {
+            font-size: 24px;
+            color: #212529;
+            margin: 0;
+        }
+        .content {
+            padding: 25px 0;
+            line-height: 1.7;
+            font-size: 16px;
+        }
+        .code-container {
+            text-align: center;
+            padding: 20px;
+            background-color: #e9ecef;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        .code {
+            font-size: 32px;
+            font-weight: 700;
+            color: #0d6efd;
+            letter-spacing: 5px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .footer {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+            font-size: 12px;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>{{.Subject}}</h1>
+        </div>
+        <div class="content">
+            <p>Добро пожаловать!</p>
+            <p>Для завершения регистрации в нашем сервисе, пожалуйста, используйте следующий код подтверждения:</p>
+            <div class="code-container">
+                <span class="code">{{.Code}}</span>
+            </div>
+            <p>Если вы не запрашивали этот код, вы можете безопасно проигнорировать это письмо.</p>
+        </div>
+        <div class="footer">
+            <p>&copy; {{.Year}} ВашСервис. Все права защищены.</p>
+        </div>
+    </div>
+</body>
+</html>

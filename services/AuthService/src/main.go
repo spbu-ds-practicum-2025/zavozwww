@@ -1,7 +1,15 @@
 package main
 
-import "fmt"
+import (
+	"authServ/pkg/logger"
+	"fmt"
+)
 
 func main() {
-	fmt.Println("Hello, world!!")
+	logger, err := logger.NewLogger()
+	if err != nil {
+		fmt.Println("Error initializing logger:", err)
+		return
+	}
+	fmt.Println(logger.Level())
 }
