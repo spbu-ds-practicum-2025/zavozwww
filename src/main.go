@@ -1,12 +1,12 @@
 package main
 
 import (
-	"authServ/pkg/logger"
 	"fmt"
+	"pkg/logger"
 )
 
 func main() {
-	logger, err := logger.NewLogger()
+	logger, err := logger.NewLogger("config/logger.yaml")
 	if err != nil {
 		fmt.Println("Error initializing logger:", err)
 		return

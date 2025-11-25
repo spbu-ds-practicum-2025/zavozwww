@@ -55,12 +55,12 @@ func NewLogger() (*Logger, error) {
 	var handler slog.Handler
 	if cfgFile.Logging.Format == "JSON" {
 		handler = slog.NewJSONHandler(out, &slog.HandlerOptions{
-			Level: getLevel(cfg.level),
+			Level:     getLevel(cfg.level),
 			AddSource: false,
 		})
 	} else {
 		handler = slog.NewTextHandler(out, &slog.HandlerOptions{
-			Level: getLevel(cfg.level),
+			Level:     getLevel(cfg.level),
 			AddSource: false,
 		})
 	}

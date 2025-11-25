@@ -39,8 +39,3 @@ func (rt *RefreshToken) Remaining() time.Duration {
 func (rt *RefreshToken) String() string {
 	return fmt.Sprintf("User: %d, until: %v, isExpired: %v", rt.UserID, rt.ExpiresAt, rt.IsExpired())
 }
-
-//TODO
-// func (rt *RefreshToken) Validate() error {
-
-// }

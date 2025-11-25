@@ -1,7 +1,6 @@
 package email
 
 import (
-	"context"
 	"errors"
 )
 
@@ -16,9 +15,4 @@ type Message struct {
 	Subject      string
 	TemplateName string
 	TemplateData map[string]interface{}
-}
-
-// EmailSender определяет контракт для отправки электронных писем.
-type EmailSender interface {
-	Send(ctx context.Context, msg Message) error
 }

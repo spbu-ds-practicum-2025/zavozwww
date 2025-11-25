@@ -5,6 +5,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time" // <-- Добавлен импорт time
 
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
@@ -55,9 +56,12 @@ func (r *UserRepository) GetUserByID(ctx context.Context, id uuid.UUID) (*entiti
 func (r *UserRepository) SaveUser(ctx context.Context, user *entities.User) (uuid.UUID, error) {
 	const op = "repositories.postgres.UserRepository.SaveUser"
 
-	query := `INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3) RETURNING id`
+	// ОБНОВЛЕННЫЙ ЗАПРОС: Добавлено verification_sent_at
+	query := `INSERT INTO users (username, email, password_hash, is_verified, verification_code, verification_sent_at) 
+              VALUES ($1, $2, $3, $4, $5, $6) 
+              RETURNING id`
 
-	row := r.db.QueryRow(ctx, query, user.Username, user.Email, user.PasswordHash)
+	row := r.db.QueryRow(ctx, query, user.Username, user.Email, user.PasswordHash, user.IsVerified, user.VerificationCode, user.VerificationSentAt)
 
 	var newID uuid.UUID
 	err := row.Scan(&newID)
@@ -110,3 +114,65 @@ func (r *UserRepository) DeleteUserByID(ctx context.Context, id uuid.UUID) error
 	return nil
 }
 
+func (r *UserRepository) GetUserByEmail(ctx context.Context, email string) (*entities.User, error) {
+	const op = "repositories.postgres.UserRepository.GetUserByEmail"
+	// ОБНОВЛЕННЫЙ ЗАПРОС: Добавлено verification_sent_at
+	query := `SELECT id, username, email, password_hash, created_at, is_verified, verification_code, verification_sent_at 
+              FROM users 
+              WHERE email = $1`
+
+	row := r.db.QueryRow(ctx, query, email)
+	var user entities.User
+	err := row.Scan(
+		&user.ID,
+		&user.Username,
+		&user.Email,
+		&user.PasswordHash,
+		&user.CreatedAt,
+		&user.IsVerified,
+		&user.VerificationCode,
+		&user.VerificationSentAt,
+	)
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return nil, fmt.Errorf("%s: %w", op, ErrUserNotFound)
+		}
+		return nil, fmt.Errorf("%s: %w", op, err)
+	}
+	return &user, nil
+}
+
+// ИСПРАВЛЕННЫЙ РЕСИВЕР: Теперь это метод UserRepository, как и должно быть.
+func (r *UserRepository) UpdateUser(ctx context.Context, user *entities.User) error {
+	const op = "repositories.postgres.UserRepository.UpdateUser"
+	query := `UPDATE users SET 
+                username = $1, 
+                email = $2, 
+                password_hash = $3, 
+                is_verified = $4, 
+                verification_code = $5 
+              WHERE id = $6`
+
+	cmdTag, err := r.db.Exec(ctx, query, user.Username, user.Email, user.PasswordHash, user.IsVerified, user.VerificationCode, user.ID)
+	if err != nil {
+		return fmt.Errorf("%s: %w", op, err)
+	}
+	if cmdTag.RowsAffected() == 0 {
+		return fmt.Errorf("%s: %w", op, ErrUserNotFound)
+	}
+	return nil
+}
+
+// UpdateVerificationCode обновляет код верификации и время его отправки.
+func (r *UserRepository) UpdateVerificationCode(ctx context.Context, email, code string, sentAt time.Time) error {
+	const op = "repositories.postgres.UserRepository.UpdateVerificationCode"
+	query := `UPDATE users SET verification_code = $1, verification_sent_at = $2 WHERE email = $3`
+	cmdTag, err := r.db.Exec(ctx, query, code, sentAt, email)
+	if err != nil {
+		return fmt.Errorf("%s: %w", op, err)
+	}
+	if cmdTag.RowsAffected() == 0 {
+		return fmt.Errorf("%s: %w", op, ErrUserNotFound)
+	}
+	return nil
+}

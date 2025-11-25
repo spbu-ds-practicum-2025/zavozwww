@@ -61,7 +61,6 @@ func TestUser_Password(t *testing.T) {
 	})
 
 	t.Run("Сравнение при пустом хеше", func(t *testing.T) {
-		// НОВЫЙ ТЕСТ: Проверяем пользователя без установленного пароля
 		userWithEmptyHash := &entities.User{}
 		match := userWithEmptyHash.ComparePassword(password)
 		assert.False(t, match, "Сравнение при пустом хеше должно всегда возвращать false")

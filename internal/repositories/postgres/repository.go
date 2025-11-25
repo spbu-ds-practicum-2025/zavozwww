@@ -4,6 +4,7 @@ import (
 	"authServ/internal/domain/entities"
 	"context"
 	"errors"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -31,6 +32,9 @@ type UsersRepository interface {
 	SaveUser(ctx context.Context, user *entities.User) (uuid.UUID, error)
 	UpdateUserName(ctx context.Context, id uuid.UUID, newUsername string) error
 	DeleteUserByID(ctx context.Context, id uuid.UUID) error
+	GetUserByEmail(ctx context.Context, email string) (*entities.User, error)
+	UpdateUser(ctx context.Context, user *entities.User) error
+	UpdateVerificationCode(ctx context.Context, email, code string, sentAt time.Time) error
 }
 
 // UserProfilesRepository определяет методы для работы с профилями.

@@ -10,7 +10,6 @@ import (
 	"gopkg.in/gomail.v2"
 )
 
-// gomailSender теперь хранит кэш распарсенных шаблонов.
 type gomailSender struct {
 	dialer    *gomail.Dialer
 	from      string
@@ -67,4 +66,9 @@ func (s *gomailSender) Send(ctx context.Context, msg Message) error {
 	}
 
 	return nil
+}
+
+// EmailSender определяет контракт для отправки электронных писем.
+type EmailSender interface {
+	Send(ctx context.Context, msg Message) error
 }
