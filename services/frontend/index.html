@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&family=Unbounded:wght@600&display=swap"
         rel="stylesheet">
     <title>FilmBuddy - поможем с выбором кино</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/favicon.png">
     <link rel="stylesheet" href="main.css">
 </head>
 
@@ -17,11 +18,16 @@
         <div class="navbar__content">
             <h1 class="logo">FILMBUDDY</h1>
             <div class="navbar__content__pages">
-                <a class="navbar__content__pages__search" data-page="search">Поиск</a>
-                <a class="navbar__content__pages__recomendation" data-page="recomendation">Рекомендации</a>
-                <a class="navbar__content__pages__friends" data-page="friends">Друзья</a>
-                <a class="navbar__content__pages__notice" data-page="notice">Уведомления</a>
-                <a class="navbar__content__pages__profile" data-page="profile">Профиль</a>
+                <a class="page navbar__content__pages__search" data-page="search">Поиск</a>
+                <a class="page navbar__content__pages__recomendation" data-page="recomendation">Рекомендации</a>
+                <a class="page navbar__content__pages__friends" data-page="friends">Друзья</a>
+                <a class="page navbar__content__pages__notice" data-page="notice">
+                    <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M29.8095 26.1571C26.4089 24.6214 26.2795 18.0295 26.277 17.8631V13.4408C26.277 9.18443 23.6761 5.52445 19.9802 3.96607C19.9722 1.77778 18.19 0 16 0C13.8101 0 12.0278 1.77789 12.0198 3.96597C8.32405 5.52435 5.72311 9.18433 5.72311 13.4406V17.863C5.7207 18.0294 5.59124 24.6213 2.1905 26.157C1.8031 26.332 1.59018 26.7537 1.67975 27.1693C1.76922 27.5849 2.13675 27.8818 2.5619 27.8818H11.1831C11.3598 28.854 11.8195 29.7585 12.5226 30.4911C13.4565 31.4641 14.6915 31.9999 15.9999 31.9999C17.3084 31.9999 18.5434 31.4641 19.4771 30.4911C20.1803 29.7584 20.64 28.8539 20.8167 27.8818H29.4379C29.863 27.8818 30.2305 27.585 30.3201 27.1693C30.4097 26.7537 30.1969 26.3321 29.8095 26.1571ZM25.3299 22.9992C25.6874 24.083 26.1936 25.1714 26.9114 26.0772H5.08859C5.80629 25.1715 6.31249 24.0832 6.66998 22.9992H25.3299ZM16 1.80471C16.9906 1.80471 17.8282 2.47033 18.0902 3.37763C17.4151 3.2376 16.716 3.16377 16 3.16377C15.2841 3.16377 14.585 3.23755 13.9098 3.37763C14.172 2.47038 15.0095 1.80471 16 1.80471ZM7.52781 17.8686V13.4406C7.52781 8.76906 11.3284 4.96848 16 4.96848C20.6717 4.96848 24.4723 8.76906 24.4723 13.4406V17.876C24.4735 18.0117 24.4946 19.4383 24.8541 21.1944H7.14575C7.50549 19.4366 7.52672 18.0075 7.52781 17.8686ZM16 30.1953C14.6227 30.1953 13.4207 29.2023 13.0349 27.8818H18.9651C18.5793 29.2023 17.3775 30.1953 16 30.1953Z" />
+                    </svg>
+                </a>
+                <a class="page navbar__content__pages__profile" data-page="profile">Профиль</a>
             </div>
         </div>
     </navbar>
@@ -38,7 +44,7 @@
     <script src="modules/search/search.js"></script>
     <script src="modules/recomendation/recomendation.js"></script>
     <script src="modules/friends/friends.js"></script>
-    <script src="otherJS/notification.js"></script>
+    <script src="modules/notification/notification.js"></script>
     <script src="app.js"></script>
     <script src="main.js"></script>
 

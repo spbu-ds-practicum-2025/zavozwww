@@ -2,6 +2,10 @@
 @import url("modules/auth/auth.css");
 @import url("modules/search/search.css");
 @import url("modules/recomendation/recomendation.css");
+@import url("modules/film/film.css");
+@import url("modules/profile/profile.css");
+@import url("modules/notification/notification.css");
+@import url("modules/friends/friends.css");
 @import url("modules/temp-notice/temp-notice.css");
 @import url("modules/navbar/navbar.css");
 

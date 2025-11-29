@@ -14,6 +14,7 @@
     --font-logo-auth: 600 48px var(--title-font-family);
     --font-logo: 600 40px var(--title-font-family);
     --font-title: 600 36px var(--title-font-family);
+    --font-small-title: 500 18px var(--title-font-family);
     --font-text: 300 16px var(--text-font-family);
     --font-extra-text: 100 16px var(--text-font-family);
     --font-button: 300 18px var(--text-font-family);

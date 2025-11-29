@@ -13,3 +13,23 @@
     color: var(--light-grey);
     font: var(--font-button);
 }
+
+.page svg {
+    fill: var(--light-grey);
+}
+
+.page svg path {
+    stroke: var(--light-grey);
+    stroke-width: 1px;
+}
+
+.page {
+    padding: 0.5em;
+    background-color: var(--dark-grey);
+    border-radius: 5px;
+    transition: filter 0.1s ease;
+}
+
+.page:hover {
+    filter: brightness(130%);
+}

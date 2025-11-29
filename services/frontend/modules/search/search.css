@@ -3,6 +3,7 @@
 
 .search-page {
     margin: 0px 64px;
+    margin-bottom: 2em;
 }
 
 .search-page__title {
@@ -30,6 +31,10 @@
     margin-bottom: 1em;
 }
 
+.search-box__input::placeholder {
+    color: var(--blue-grey);
+}
+
 .search-box__button {
     width: 10em;
     height: calc(2.25em + 2px);
@@ -40,6 +45,11 @@
     border-radius: 0.65em;
     margin-bottom: 0.9em;
     cursor: pointer;
+    transition: filter 0.1s ease;
+}
+
+.search-box__button:hover {
+    filter: brightness(130%);
 }
 
 .filters {
@@ -52,10 +62,15 @@
     border: none;
     border-radius: 0.65em;
     cursor: pointer;
+    transition: filter 0.1s ease;
 
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
+}
+
+.filters:hover {
+    filter: brightness(130%);
 }
 
 /* For IE <= 11 */

@@ -48,13 +48,15 @@
     font: var(--font-text);
     border: 1px solid var(--light-grey);
     border-radius: 0.65em;
-
     margin-bottom: 1.5em;
 }
 
-.auth__form__group input,
-input::placeholder {
+.auth__form__group input {
     color: var(--light-grey);
+}
+
+.auth__form__group input::placeholder {
+    color: var(--blue-grey);
 }
 
 .auth__form__button {
@@ -67,6 +69,7 @@ input::placeholder {
     border-radius: 0.65em;
     margin-bottom: 0.75em;
     cursor: pointer;
+    transition: filter 0.1s ease;
 }
 
 .auth__form__button_sec {
@@ -78,4 +81,14 @@ input::placeholder {
     border: 1px solid var(--light-grey);
     border-radius: 0.65em;
     cursor: pointer;
+    transition: all 0.1s ease;
+}
+
+.auth__form__button:hover {
+    filter: brightness(130%);
+}
+
+.auth__form__button_sec:hover {
+    background-color: var(--light-grey);
+    color: var(--grey);
 }

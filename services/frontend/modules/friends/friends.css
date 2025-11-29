@@ -1,0 +1,78 @@
+@import url("../search/search.css");
+@import url("../profile/profile.css");
+
+.friends-page {
+    margin: 0px 64px;
+    margin-bottom: 2em;
+}
+
+.friends-page__title {
+    color: var(--light-grey);
+    font: var(--font-title);
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+}
+
+.friends-page__title_small {
+    color: var(--light-grey);
+    font: var(--font-small-title);
+    margin-bottom: 1em;
+}
+
+.friends-page__your-friends {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.friends-page__result {
+    border-bottom: 1px solid var(--light-grey);
+    margin-bottom: 1em;
+}
+
+.friends-page__without-friends {
+    color: var(--light-grey);
+    font: var(--font-text);
+    margin-bottom: 0.5em;
+}
+
+.friend-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    color: var(--light-grey);
+
+    padding: 1em;
+    background-color: var(--grey);
+    border-radius: 10px;
+}
+
+.friend-card__title {
+    font: var(--font-small-title);
+}
+
+.friend-card__data {
+    font: var(--font-text);
+}
+
+.profile-acticity-friendsPage {
+    display: flex;
+    gap: 2em;
+}
+
+.friend-card__add-btn {
+    margin-top: 0.5em;
+    margin-bottom: 1em;
+    height: calc(2.5em + 2px);
+    padding: 0.7em;
+    font: var(--font-button);
+    color: var(--light-grey);
+    background-color: var(--blue-grey);
+    border-radius: 0.65em;
+    cursor: pointer;
+    transition: filter 0.1s ease;
+}
+
+.friend-card__add-btn:hover {
+    filter: brightness(130%);
+}

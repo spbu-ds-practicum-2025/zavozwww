@@ -3,13 +3,16 @@ class FriendsManager {
         const mainContent = document.getElementById("main-content");
         mainContent.innerHTML = `
             <div class="friends-page">
-                <h2>Поиск пользователей</h2>
+                <h1 class="friends-page__title">Поиск пользователей</h1>
                 <div class="search-box">
-                    <input type="text" id="friends-search" placeholder="Логин пользователя...">
-                    <button id="search-btn">Найти</button>
-                <div id="friends-results"></div>
-                <h1>Ваши друзья</h1>
-                <div id="friends"></div>
+                    <input type="text" id="friends-search" class="search-box__input" placeholder="Логин пользователя...">
+                    <button id="search-btn" class="search-box__button">Найти</button>
+                </div>
+                <div id="your-friends-results">
+                    <h2 class="friends-page__title_small">Ваши друзья</h2>
+                    <div id="your-friends" class="friends-page__result friends-page__your-friends"></div>
+                </div>
+                <div id="search-friends-results" class="results friends-page__results"></div>
             </div>
         `
 
@@ -32,6 +35,7 @@ class FriendsManager {
             let data = await api.searchFriend(searchQuery);
             this.renderSearchFriends(data.friends);
         } catch(error) {
+            tempNotice.error("Ошибка, попробуйте еще раз через некоторое время");
             console.log(`Error: ${error.message}`);
         }
     }
@@ -40,38 +44,60 @@ class FriendsManager {
         this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
         let friends = this.currentUser.friends;
 
-        const yourFriends = document.getElementById("friends");
-
-        if(yourFriends.length == 0){
+        const yourFriends = document.getElementById("your-friends");
+        console.log(yourFriends.innerHTML);
+        if(friends.length == 0){
             yourFriends.innerHTML = `
-            <p>У Вас пока нет друзей. Скорее найдите их и отправте запрос на дружбу!</p>
+            <p class="friends-page__without-friends">У Вас пока нет друзей. Скорее найдите их и отправте запрос на дружбу!</p>
             `
+            return;
         }
 
         yourFriends.innerHTML = friends.map(friend => 
             `
             <div class="friend-card">
-                <img src="${friend.avatarSrc}" class="friend-card__image"/>
-                <h3 class="friend-card__name">${friend.name}</h3>
+                <p class="friend-card__title">Имя: <span class="friend-card__data">${friend.name}</span></p>
+                <p class="friend-card__title">Дата регистрации: <span class="friend-card__data">${friend.regDate}</span></p>
+                <div class="profile-activity">
+                    <div class="profile-stat profile-stat-friendsPage">
+                        <span class="categorie">Оцененных фильмов:</span>
+                        <span class="number">${this.currentUser.countRateFilms}</span>
+                    </div>
+                    <div class="profile-stat profile-stat-friendsPage">
+                        <span class="categorie">Количество друзей:</span>
+                        <span class="number">${this.currentUser.countFriends}</span>
+                    </div>
+                </div>
             </div>
             `
         ).join("");
     }
 
     renderSearchFriends(friendsArray) {
-        const results = document.getElementById("friends-results");
+        const results = document.getElementById("search-friends-results");
         
         if(friendsArray.length == 0){
             results.innerHTML = `
-            <p>Просстите, но мы не можем найти такого пользователя</p>
+            <p class="friends-page__without-friends">Просстите, но мы не можем найти такого пользователя</p>
             `
+            return;
         }
 
         results.innerHTML = friendsArray.map(friend => 
             `
             <div class="friend-card">
-                <img src="${friend.avatarSrc}" class="friend-card__image"/>
-                <h3 class="friend-card__name">${friend.name}</h3>
+                <p class="friend-card__title">Имя: <span class="friend-card__data">${friend.name}</span></p>
+                <p class="friend-card__title">Дата регистрации: <span class="friend-card__data">${friend.regDate}</span></p>
+                <div class="profile-activity profile-acticity-friendsPage">
+                    <div class="profile-stat profile-stat-friendsPage">
+                        <span class="categorie">Оцененных фильмов:</span>
+                        <span class="number">${friend.countRateFilms}</span>
+                    </div>
+                    <div class="profile-stat profile-stat-friendsPage">
+                        <span class="categorie">Количество друзей:</span>
+                        <span class="number">${friend.countFriends}</span>
+                    </div>
+                </div>
                 <button class="friend-card__add-btn" onclick="friendsManager.sendRequest(${friend.name})">Добавить в друзья</button>
             </div>
             `

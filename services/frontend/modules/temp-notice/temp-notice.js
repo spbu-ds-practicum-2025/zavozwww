@@ -10,7 +10,7 @@ class TemporaryNotice {
         document.body.appendChild(noticeContainer);
 
         setTimeout(() => {
-            noticeContainer.classList.add("show");;
+            noticeContainer.classList.add("show");
         }, 10);
 
         setTimeout(() => {

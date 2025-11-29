@@ -96,6 +96,12 @@
     background-color: var(--blue-grey);
     border-radius: 0.65em;
     cursor: pointer;
+    transition: filter 0.1s ease;
+
+}
+
+.rate-btn:hover {
+    filter: brightness(130%);
 }
 
 .review {

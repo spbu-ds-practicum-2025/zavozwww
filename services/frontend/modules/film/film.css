@@ -1,3 +1,64 @@
+@import url("../movie-card/movie-card.css");
+@import url("../rate/rate.css");
+
+.back-btn {
+    font: var(--font-button);
+    color: var(--light-grey);
+    padding: 0.3em;
+    background-color: var(--grey);
+    border-radius: 5px;
+    margin-bottom: 1em;
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-block;
+    transition: filter 0.1s ease;
+}
+
+.back-btn:hover {
+    filter: brightness(130%);
+}
+
+.film-page {
+    background-color: var(--grey);
+    margin-left: 64px;
+    margin-right: 64px;
+    padding: 2em;
+    border-radius: 10px;
+}
+
+.film-article {
+    display: flex;
+    gap: 2em;
+}
+
+.film-article__poster {
+    border-radius: 10px;
+    width: auto;
+    height: 30%;
+}
+
+.film-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
 .film-article__title {
-    font: var(--font-title);
+    font: var(--font-logo);
+    color: var(--light-grey);
+}
+
+.film-article__year {
+    font: var(--font-extra-text);
+    color: var(--light-grey);
+}
+
+.film-article__rating {
+    font: var(--font-text);
+    color: var(--light-grey);
+}
+
+.film-article__description {
+    font: var(--font-text);
+    color: var(--light-grey);
 }

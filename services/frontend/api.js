@@ -64,18 +64,32 @@ class Api {
         return this.request("/recomendations");
     }
 
-    async searchFriend(Name){
-        return this.request("/friends/request", {
+    async searchFriend(Name) {
+        return this.request(`/friends/search?name=${encodeURIComponent(Name)}`, {
             method: "POST",
-            body: JSON.stringify({ target_username: Name }),
-        })
+            body: JSON.stringify({ target_user_id: Name }),
+        });
     }
 
     async addFriend(Name) {
-        return this.request("/friends/add", {
+        return this.request("/friends/request", {
            method: "POST",
-           body: JSON.stringify({userName: Name})
+           body: JSON.stringify({target_user_id: Name}),
        });
+    }
+
+    async acceptRequest(userFrom) {
+        return this.request("/friends/accept/request_id", {
+            method: "POST",
+            body: JSON.stringify({user_id: userFrom}),
+        });
+    }
+
+    async declineRequest(userFrom) {
+        return this.request("/friends/decline/request_id", {
+            method: "POST",
+            body: JSON.stringify({user_id: userFrom}),
+        })
     }
 }
 

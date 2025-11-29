@@ -1,0 +1,79 @@
+.notice-container {
+    position: absolute;
+    z-index: 1000;
+    right: 20px;
+    opacity: 0;
+    transform: translateX(400px);
+    padding: 1em;
+    background-color: var(--grey);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+}
+
+.notice-container.show-notice {
+    transform: translateX(0px);
+    opacity: 1;
+}
+
+.notice-container.hide-notice {
+    transform: translateX(400px);
+    opacity: 0;
+}
+
+.notice-card {
+    color: var(--light-grey);
+    display: flex;
+    align-items: center;
+    gap: 2em;
+}
+
+.notice-card__message {
+    font: var(--font-text);
+}
+
+.from-request {
+    font: var(--font-small-title);
+}
+
+.notice-card__actions {
+    display: flex;
+    gap: 1em;
+}
+
+.btn {
+    display: block;
+    padding: 0.5em;
+    font: var(--font-button);
+    color: var(--light-grey);
+    border-radius: 0.65em;
+    cursor: pointer;
+    transition: filter 0.1s ease;
+}
+
+.button:hover {
+    filter: brightness(80%);
+}
+
+.accept-btn {
+    background-color: var(--blue-grey);
+}
+
+.decline-btn {
+    background-color: var(--error-red);
+}
+
+.haveNotice {
+    position: relative
+}
+
+.haveNotice::after {
+    content: " \25CF";
+    color: var(--error-red);
+    position: absolute;
+    top: 0;
+    right: 0;
+}
