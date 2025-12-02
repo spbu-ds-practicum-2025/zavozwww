@@ -6,7 +6,6 @@ class NoticeManager {
         this.notifications = new Map();
         this.socket.onmessage = (event) => {
             const notification = JSON.parse(event.data);
-            this.haveNotice = true;
             document.querySelector(".navbar__content__pages__notice").classList.add("haveNotice");
             this.notifications.set(notification.user_id, notification);
         }   
@@ -14,9 +13,15 @@ class NoticeManager {
 
     render() {
         console.log("render");
-        this.haveNotice = false;
-        document.querySelector(".navbar__content__pages__notice").classList.remove("haveNotice");
-        if (document.querySelector('.notice-container')) {
+        if(this.notifications.size == 0){
+            document.querySelector(".navbar__content__pages__notice").classList.remove("haveNotice");
+        }
+        if (document.querySelector(".notice-container")) {
+            if(this.notifications.size == 0) {
+                document.querySelector(".notice-container").innerHTML = `
+                    <p class="notice-card__message">У вас нет уведомлений</p>
+                `
+            }
             console.log("return");
             return;
         }
@@ -24,34 +29,40 @@ class NoticeManager {
         const notice = document.createElement("div");
         console.log("create");
         notice.classList.add("notice-container");
-        notice.innerHTML = Array.from(this.notifications.values()).map(note => 
-            `
-            <div id="request-${note.user_id}" class="notice-card">
-                <p class="notice-card__message">Вам запрос на дружбу от <span class="from-request">${note.username}</span></p>
-                <div class="notice-card__actions">
-                <button class="btn accept-btn" data-id="${note.user_id}" class"notice-card__accept-btn">Принять</button>
-                <button class="btn decline-btn" data-id="${note.user_id}" class="notice-card__decline-btn">Отклонить</button>
+        if(this.notifications.size > 0){
+            notice.innerHTML = Array.from(this.notifications.values()).map(note => 
+                `
+                <div id="request-${note.user_id}" class="notice-card">
+                    <p class="notice-card__message">Вам запрос на дружбу от <span class="from-request">${note.username}</span></p>
+                    <div class="notice-card__actions">
+                    <button class="btn accept-btn" data-id="${note.user_id}" class"notice-card__accept-btn">Принять</button>
+                    <button class="btn decline-btn" data-id="${note.user_id}" class="notice-card__decline-btn">Отклонить</button>
+                    </div>
                 </div>
-            </div>
-            `
-        ).join("");
-        console.log(notice);
-        console.log("map");
+                `
+            ).join("");
+            console.log(notice);
+            console.log("map");
 
-        notice.querySelectorAll('.accept-btn').forEach(btn => {
-            btn.addEventListener('click', (event) => {
-                const userId = event.currentTarget.dataset.id;
-                event.stopPropagation();
-                this.acceptRequest(userId);
+            notice.querySelectorAll(".accept-btn").forEach(btn => {
+                btn.addEventListener("click", (event) => {
+                    const userId = event.currentTarget.dataset.id;
+                    event.stopPropagation();
+                    this.acceptRequest(userId);
+                });
             });
-        });
-        notice.querySelectorAll('.decline-btn').forEach(btn => {
-            btn.addEventListener('click', (event) => {
-                const userId = event.target.dataset.id;
-                event.stopPropagation();
-                this.declineRequest(userId);
+            notice.querySelectorAll(".decline-btn").forEach(btn => {
+                btn.addEventListener("click", (event) => {
+                    const userId = event.target.dataset.id;
+                    event.stopPropagation();
+                    this.declineRequest(userId);
+                });
             });
-        });
+        } else {
+            notice.innerHTML = `
+                <p class="notice-card__message">У вас нет уведомлений</p>
+            `
+        }
 
         document.getElementById("navbar").after(notice);
         console.log("add");
@@ -74,12 +85,12 @@ class NoticeManager {
         setTimeout(() => {
             document.addEventListener("click", closeHandler);
         }, 0);
-    }  
+    }
 
     async acceptRequest(userFrom){
         try {
             await api.acceptRequest(userFrom);
-            this.notifications.delete(userFrom);
+            this.notifications.delete(Number(userFrom));
             document.getElementById(`request-${userFrom}`).remove();
             tempNotice.success("Вы приняли запрос на дружбу"); 
             this.render();
@@ -92,7 +103,7 @@ class NoticeManager {
     async declineRequest(userFrom){
         try {
             await api.declineRequest(userFrom);
-            this.notifications.delete(userFrom);
+            this.notifications.delete(Number(userFrom));
             document.getElementById(`request-${userFrom}`).remove();
             tempNotice.success("Вы отклонили запрос на дружбу"); 
             this.render();

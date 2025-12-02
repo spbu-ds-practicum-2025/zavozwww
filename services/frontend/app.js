@@ -1,6 +1,9 @@
 class App {
     constructor(){
-        this.currentPage = localStorage.getItem("currentPage") || "search";
+        if(!localStorage.getItem("currentPage")) {
+            localStorage.setItem("currentPage", "search");
+        }
+        this.currentPage = localStorage.getItem("currentPage");
         this.token = localStorage.getItem("token");
         const userData = localStorage.getItem("currentUser");
         this.currentUser = userData ? JSON.parse(userData) : null;
@@ -14,22 +17,22 @@ class App {
         try {
             const ws = new WebSocket(`/users/notifications?token=${this.token}`);
             ws.onopen = () => {
-                console.log('WebSocket connected');
+                console.log("WebSocket connected");
             };
             ws.onerror = (error) => {
-                console.error('WebSocket error:', error);
+                console.error("WebSocket error:", error);
             };
             
             return ws;
         } catch (error) {
-            console.error('Failed to connect to notifications:', error);
+            console.error("Failed to connect to notifications:", error);
             return null;
         }
     }
 
 
     async init(){   
-        localStorage.setItem('currentPage', this.currentPage);
+        localStorage.setItem("currentPage", this.currentPage);
         if (this.token) {
             this.notificationSocket = await this.connectNotification();
             if (this.notificationSocket) {
@@ -37,9 +40,10 @@ class App {
             }
         }
         document.addEventListener("click", (event) => {
-            if(event.target.closest("[data-page]")){
+            const clickedPage = event.target.closest("[data-page]");
+            if(clickedPage){
                 event.preventDefault();
-                this.loadPages(event.target.dataset.page);
+                this.loadPages(clickedPage.dataset.page);
             }
         });
 
@@ -49,10 +53,9 @@ class App {
     }
 
     loadPages(name){
-        console.log(name);
         if(name != "profile" && name != "notice"){
             this.currentPage = name;
-            localStorage.setItem('currentPage', name);
+            localStorage.setItem("currentPage", name);
         } 
         switch(name){
             case "search":
@@ -65,7 +68,6 @@ class App {
                 this.noticeManager.render();
                 break;
             case "profile":
-                console.log(this.profileShowen);
                 if(!this.profileShowen){
                     this.profileShowen = true;
                     profileManager.render();

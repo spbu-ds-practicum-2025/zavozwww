@@ -45,7 +45,6 @@ class FriendsManager {
         let friends = this.currentUser.friends;
 
         const yourFriends = document.getElementById("your-friends");
-        console.log(yourFriends.innerHTML);
         if(friends.length == 0){
             yourFriends.innerHTML = `
             <p class="friends-page__without-friends">У Вас пока нет друзей. Скорее найдите их и отправте запрос на дружбу!</p>

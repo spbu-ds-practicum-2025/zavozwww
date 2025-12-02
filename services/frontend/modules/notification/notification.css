@@ -33,6 +33,7 @@
 
 .notice-card__message {
     font: var(--font-text);
+    color: var(--light-grey);
 }
 
 .from-request {
