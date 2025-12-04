@@ -1,17 +1,9 @@
 server:
-  host: localhost
+  host: 0.0.0.0
   port: 8080
 logging:
   level: DEBUG
   format: TEXT
-  file: C:\var\logFileAuth\AuthLogs.txt
-database:
-  user: auth_user
-  host: localhost 
-  port: 5432
-  password: 6324eB6324
-  dbname: auth_db
-  sslmode: disable
 email:
   smtp_host: localhost
   smtp_port: 1025

@@ -9,7 +9,6 @@ var (
 	ErrTemplateExecute = errors.New("failed to execute email template")
 )
 
-// Message инкапсулирует все данные для отправки одного письма.
 type Message struct {
 	To           []string
 	Subject      string

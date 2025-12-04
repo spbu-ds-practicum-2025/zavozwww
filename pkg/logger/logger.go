@@ -10,8 +10,7 @@ import (
 
 // Logger представляет собой настраиваемый логгер с уровнем логирования и путем к файлу.
 type Logger struct {
-	pathToFile string `yaml:"file"`
-	level      string `yaml:"level"`
+	level string `yaml:"level"`
 	slog.Logger
 }
 
@@ -20,7 +19,6 @@ type configFile struct {
 	Logging struct {
 		Level  string `yaml:"level"`
 		Format string `yaml:"format"`
-		File   string `yaml:"file"`
 	} `yaml:"logging"`
 }
 
@@ -39,18 +37,10 @@ func NewLogger() (*Logger, error) {
 	}
 
 	cfg := Logger{
-		pathToFile: cfgFile.Logging.File,
-		level:      cfgFile.Logging.Level,
+		level: cfgFile.Logging.Level,
 	}
 
 	out := os.Stdout
-	if cfg.pathToFile != "" {
-		f, err := os.OpenFile(cfg.pathToFile, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0o644)
-		if err != nil {
-			return nil, fmt.Errorf("open log file %q: %w", cfg.pathToFile, err)
-		}
-		out = f
-	}
 
 	var handler slog.Handler
 	if cfgFile.Logging.Format == "JSON" {
@@ -68,9 +58,8 @@ func NewLogger() (*Logger, error) {
 	slogLogger := slog.New(handler)
 
 	l := &Logger{
-		pathToFile: cfg.pathToFile,
-		level:      cfg.level,
-		Logger:     *slogLogger,
+		level:  cfg.level,
+		Logger: *slogLogger,
 	}
 
 	return l, nil

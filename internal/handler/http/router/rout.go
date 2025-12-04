@@ -1,4 +1,4 @@
-package http
+package rout
 
 import (
 	"authServ/internal/services"
@@ -12,9 +12,17 @@ import (
 	"github.com/didip/tollbooth/limiter"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/cors"
 	"github.com/go-chi/render"
-	"github.com/gorilla/csrf"
 )
+
+type ProfileReq struct {
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
+	Age       int    `json:"age"`
+	Info      string `json:"info"`
+	City      string `json:"city"`
+}
 
 // Handler обрабатывает HTTP-запросы, связанные с аутентификацией и управлением пользователями.
 type Handler struct {
@@ -68,22 +76,32 @@ func newRateLimiter() func(http.Handler) http.Handler {
 	}
 }
 
-// InitRoutes инициализирует маршруты HTTP и возвращает роутер.
 func (h *Handler) InitRoutes() *chi.Mux {
 	router := chi.NewRouter()
+
+	router.Use(cors.Handler(cors.Options{
+		AllowedOrigins:   []string{"http://127.0.0.1:5500", "http://localhost:5500"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+		ExposedHeaders:   []string{"Link"},
+		AllowCredentials: true,
+		MaxAge:           300,
+		Debug:            true,
+	}))
+
 	router.Use(middleware.RequestID)
 	router.Use(h.logRequestMiddleware)
 	router.Use(middleware.Recoverer)
 	router.Use(middleware.URLFormat)
 	router.Use(render.SetContentType(render.ContentTypeJSON))
 
-	csrfMiddleware := csrf.Protect(
-		[]byte("32-byte-long-auth-key"),
-		csrf.Secure(false), // Установить в true для продакшена
-		csrf.HttpOnly(true),
-		csrf.Path("/"),
-	)
-	router.Use(csrfMiddleware)
+	// csrfMiddleware := csrf.Protect(
+	// 	[]byte("32-byte-long-auth-key"),
+	// 	csrf.Secure(false), // Установить в true для продакшена
+	// 	csrf.HttpOnly(true),
+	// 	csrf.Path("/"),
+	// )
+	// router.Use(csrfMiddleware)
 
 	router.Group(func(r chi.Router) {
 		r.Use(newRateLimiter())
@@ -157,6 +175,7 @@ func (h *Handler) verifyEmail(w http.ResponseWriter, r *http.Request) {
 		h.log.Error("failed to verify email", "id", middleware.GetReqID(r.Context()), "error", err)
 		render.Status(r, http.StatusBadRequest)
 		render.JSON(w, r, map[string]string{"error": err.Error()})
+
 		return
 	}
 
@@ -231,11 +250,8 @@ func (h *Handler) resendVerificationEmail(w http.ResponseWriter, r *http.Request
 	render.JSON(w, r, map[string]string{"message": "a new verification email has been sent"})
 }
 
-// saveProfile обрабатывает запросы на сохранение/обновление профиля пользователя.
 func (h *Handler) saveProfile(w http.ResponseWriter, r *http.Request) {
-	// --- НАЧАЛО: Простой способ получения userID ---
 
-	// 1. Получаем заголовок Authorization
 	authHeader := r.Header.Get("Authorization")
 	if authHeader == "" {
 		render.Status(r, http.StatusUnauthorized)
@@ -243,7 +259,6 @@ func (h *Handler) saveProfile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// 2. Проверяем формат "Bearer <token>"
 	headerParts := strings.Split(authHeader, " ")
 	if len(headerParts) != 2 || headerParts[0] != "Bearer" {
 		render.Status(r, http.StatusUnauthorized)
@@ -252,7 +267,6 @@ func (h *Handler) saveProfile(w http.ResponseWriter, r *http.Request) {
 	}
 	tokenString := headerParts[1]
 
-	// 3. Проверяем токен и получаем userID с помощью вашего сервиса
 	userID, err := h.userService.ParseAccessToken(r.Context(), tokenString)
 	if err != nil {
 		render.Status(r, http.StatusUnauthorized)
@@ -260,9 +274,7 @@ func (h *Handler) saveProfile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// --- КОНЕЦ: Простой способ получения userID ---
-
-	var input services.ProfileReq
+	var input ProfileReq
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
 		h.log.Error("failed to decode request body", "id", middleware.GetReqID(r.Context()), "error", err)
 		render.Status(r, http.StatusBadRequest)
@@ -270,7 +282,15 @@ func (h *Handler) saveProfile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = h.profileService.SaveProfile(r.Context(), input, userID)
+	profileEntity := &services.ProfileReq{
+		FirstName: input.FirstName,
+		LastName:  input.LastName,
+		Age:       input.Age,
+		Info:      input.Info,
+		City:      input.City,
+	}
+
+	err = h.profileService.SaveProfile(r.Context(), *profileEntity, userID)
 	if err != nil {
 		h.log.Error("failed to save profile", "id", middleware.GetReqID(r.Context()), "error", err)
 		render.Status(r, http.StatusInternalServerError)

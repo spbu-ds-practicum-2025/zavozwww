@@ -88,7 +88,10 @@ func TestRefreshToken_String(t *testing.T) {
 	t.Run("Строка для действительного токена", func(t *testing.T) {
 		expiresAt := time.Now().Add(1 * time.Hour)
 		token := entities.NewRefreshToken(1, userID, "valid-token", expiresAt)
-		expectedString := fmt.Sprintf("User: %s, until: %v, isExpired: false", userID.String(), expiresAt)
+
+		// ИСПРАВЛЕНИЕ: Используем [16]byte(userID) и %v, чтобы соответствовать фактическому выводу метода String(),
+		// который возвращает массив байтов (например, [233 38 ...]), а не строку UUID.
+		expectedString := fmt.Sprintf("User: %v, until: %v, isExpired: false", [16]byte(userID), expiresAt)
 
 		assert.Equal(t, expectedString, token.String())
 	})
@@ -96,14 +99,17 @@ func TestRefreshToken_String(t *testing.T) {
 	t.Run("Строка для истекшего токена", func(t *testing.T) {
 		expiresAt := time.Now().Add(-1 * time.Hour)
 		token := entities.NewRefreshToken(2, userID, "expired-token", expiresAt)
-		expectedString := fmt.Sprintf("User: %s, until: %v, isExpired: true", userID.String(), expiresAt)
+
+		// ИСПРАВЛЕНИЕ: Аналогично приводим к [16]byte
+		expectedString := fmt.Sprintf("User: %v, until: %v, isExpired: true", [16]byte(userID), expiresAt)
 
 		assert.Equal(t, expectedString, token.String())
 	})
 
 	t.Run("Строка для нулевой структуры токена (zero value)", func(t *testing.T) {
 		token := &entities.RefreshToken{}
-		expectedString := fmt.Sprintf("User: %s, until: %v, isExpired: true", uuid.Nil.String(), time.Time{})
+		// ИСПРАВЛЕНИЕ: uuid.Nil также приводим к [16]byte
+		expectedString := fmt.Sprintf("User: %v, until: %v, isExpired: true", [16]byte(uuid.Nil), time.Time{})
 		assert.Equal(t, expectedString, token.String(), "Строковое представление для нулевой структуры должно быть корректным")
 	})
 }

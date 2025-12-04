@@ -3,7 +3,6 @@ package services
 import (
 	"authServ/internal/domain/entities"
 	"context"
-	"errors"
 	"fmt"
 
 	"github.com/google/uuid"
@@ -52,7 +51,7 @@ func (s *profileService) SaveProfile(ctx context.Context, inputProfile ProfileRe
 
 	err = s.profileRepo.UpdateProfile(ctx, userProfile)
 	if err != nil {
-		if errors.Is(err, errors.New("user profile not found")) {
+		if err.Error() == "user profile not found" {
 			if createErr := s.profileRepo.SaveProfile(ctx, userProfile); createErr != nil {
 				return fmt.Errorf("%s: failed to create profile: %w", op, createErr)
 			}

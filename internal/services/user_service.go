@@ -22,9 +22,8 @@ type RegisterUser struct {
 
 // LoginUser используется для аутентификации пользователя.
 type LoginUser struct {
-	Email    string                `json:"email"`
-	Password string                `json:"password"`
-	RefToken entities.RefreshToken `json:"ref_token"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
 }
 
 // UpdateUserName используется для обновления имени пользователя.

@@ -30,7 +30,11 @@ var _ UsersRepository = (*UserRepository)(nil)
 func (r *UserRepository) GetUserByID(ctx context.Context, id uuid.UUID) (*entities.User, error) {
 	const op = "repositories.postgres.UserRepository.GetUserByID"
 
-	query := `SELECT id, username, email, password_hash, created_at FROM users WHERE id = $1`
+	// ИСПРАВЛЕНИЕ: Преобразуем created_at в текст, чтобы соответствовать полю CreatedAt (string) в структуре.
+	// Остальные поля, включая verification_sent_at, не трогаем.
+	query := `SELECT id, username, email, password_hash, created_at::text, is_verified, verification_code, verification_sent_at 
+               FROM users 
+               WHERE id = $1`
 
 	row := r.db.QueryRow(ctx, query, id)
 
@@ -41,6 +45,9 @@ func (r *UserRepository) GetUserByID(ctx context.Context, id uuid.UUID) (*entiti
 		&user.Email,
 		&user.PasswordHash,
 		&user.CreatedAt,
+		&user.IsVerified,
+		&user.VerificationCode,
+		&user.VerificationSentAt,
 	)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
@@ -55,8 +62,7 @@ func (r *UserRepository) GetUserByID(ctx context.Context, id uuid.UUID) (*entiti
 // SaveUser сохраняет нового пользователя в базе данных и возвращает его ID.
 func (r *UserRepository) SaveUser(ctx context.Context, user *entities.User) (uuid.UUID, error) {
 	const op = "repositories.postgres.UserRepository.SaveUser"
-
-	// ОБНОВЛЕННЫЙ ЗАПРОС: Добавлено verification_sent_at
+	user.IsVerified = false
 	query := `INSERT INTO users (username, email, password_hash, is_verified, verification_code, verification_sent_at) 
               VALUES ($1, $2, $3, $4, $5, $6) 
               RETURNING id`
@@ -116,8 +122,8 @@ func (r *UserRepository) DeleteUserByID(ctx context.Context, id uuid.UUID) error
 
 func (r *UserRepository) GetUserByEmail(ctx context.Context, email string) (*entities.User, error) {
 	const op = "repositories.postgres.UserRepository.GetUserByEmail"
-	// ОБНОВЛЕННЫЙ ЗАПРОС: Добавлено verification_sent_at
-	query := `SELECT id, username, email, password_hash, created_at, is_verified, verification_code, verification_sent_at 
+
+	query := `SELECT id, username, email, password_hash, created_at::text, is_verified, verification_code, verification_sent_at 
               FROM users 
               WHERE email = $1`
 
@@ -135,25 +141,30 @@ func (r *UserRepository) GetUserByEmail(ctx context.Context, email string) (*ent
 	)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
+			// Добавим лог, чтобы было видно, что пользователь не найден на этом этапе
+			fmt.Printf("--- ОТЛАДКА: Пользователь с email '%s' не найден основным запросом (pgx.ErrNoRows).\n", email)
 			return nil, fmt.Errorf("%s: %w", op, ErrUserNotFound)
 		}
 		return nil, fmt.Errorf("%s: %w", op, err)
 	}
+
 	return &user, nil
 }
 
 // ИСПРАВЛЕННЫЙ РЕСИВЕР: Теперь это метод UserRepository, как и должно быть.
 func (r *UserRepository) UpdateUser(ctx context.Context, user *entities.User) error {
 	const op = "repositories.postgres.UserRepository.UpdateUser"
+	// ИСПРАВЛЕНИЕ: Добавлено поле verification_sent_at
 	query := `UPDATE users SET 
                 username = $1, 
                 email = $2, 
                 password_hash = $3, 
                 is_verified = $4, 
-                verification_code = $5 
-              WHERE id = $6`
+                verification_code = $5,
+                verification_sent_at = $6
+              WHERE id = $7`
 
-	cmdTag, err := r.db.Exec(ctx, query, user.Username, user.Email, user.PasswordHash, user.IsVerified, user.VerificationCode, user.ID)
+	cmdTag, err := r.db.Exec(ctx, query, user.Username, user.Email, user.PasswordHash, user.IsVerified, user.VerificationCode, user.VerificationSentAt, user.ID)
 	if err != nil {
 		return fmt.Errorf("%s: %w", op, err)
 	}

@@ -52,7 +52,7 @@ func NewUser(username, email, password string) (*User, error) {
 		return nil, fmt.Errorf("%s: %s", op, err.Error())
 	}
 	user := &User{
-		ID:               uuid.New(), // Добавил генерацию ID здесь
+		ID:               uuid.New(),
 		Username:         username,
 		Email:            email,
 		CreatedAt:        time.Now().Format(time.RFC3339),
@@ -72,6 +72,9 @@ func GenerateVerificationCode() (string, error) {
 	var table = [...]byte{'1', '2', '3', '4', '5', '6', '7', '8', '9', '0'}
 	b := make([]byte, codeLength)
 	n, err := io.ReadAtLeast(rand.Reader, b, codeLength)
+	if err != nil {
+		return "", fmt.Errorf("failed to generate bytes for code: %w", err)
+	}
 	if n != codeLength {
 		return "", fmt.Errorf("failed to generate random bytes for code: %w", err)
 	}

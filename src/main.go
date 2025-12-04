@@ -13,6 +13,10 @@ import (
 	"os"
 	"strconv"
 	"time"
+
+	"github.com/golang-migrate/migrate/v4"
+	_ "github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 )
 
 // Helper function для чтения env (чтобы не загромождать main)
@@ -24,45 +28,78 @@ func getEnv(key, fallback string) string {
 }
 
 func main() {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Printf("FATAL PANIC DETECTED BEFORE LOGGER INIT: %v\n", r)
+			os.Exit(1)
+		}
+	}()
+	fmt.Println("DEBUG: Starting main function")
+
+	fmt.Printf("DEBUG: APP_CONFIG_PATH=%s\n", os.Getenv("APP_CONFIG_PATH"))
+
 	ctx := context.Background()
+	fmt.Println("DEBUG: Context created")
+
+	fmt.Println("DEBUG: Before logger initialization")
 	logger, err := logger.NewLogger()
 	if err != nil {
-		fmt.Println("Error initializing logger:", err)
-		return
+		fmt.Println("Error initializing logger:", "error", err)
+		return 
 	}
-	fmt.Println("Logger level:", logger.Level())
+	logger.Info("Logger initialized successfully.")
 
 	var cfgPg repositories.PgConfig
 	err = cfgPg.GetConfig()
 	if err != nil {
-		fmt.Println("Error getting PG config:", err)
+		logger.Error("Error getting PG config:", "error", err)
 		return
 	}
+
+	dsnMigrate := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s",
+		cfgPg.User, cfgPg.Password, cfgPg.Host, cfgPg.Port, cfgPg.DBName, cfgPg.SSLMode)
+
+	const migrationsPath = "file:///app/migration"
+
+	m, err := migrate.New(
+		migrationsPath,
+		dsnMigrate,
+	)
+	if err != nil {
+		logger.Error("Error creating migrator", "err", err)
+		return
+	}
+
+	if err := m.Up(); err != nil && err != migrate.ErrNoChange {
+		logger.Error("Failed to apply migrations", "err", err)
+		return
+	}
+	logger.Info("Migrations applied successfully.")
 
 	pgxPool, err := repositories.NewPostgresStorage(ctx, cfgPg)
 	if err != nil {
-		fmt.Println("Error connecting to Postgres:", err)
+		logger.Error("Error connecting to Postgres:", "error", err)
 		return
 	}
 	defer pgxPool.Close()
-	fmt.Println("Successfully connected to Postgres")
-
+	logger.Info("Successfully connected to Postgres")
 	userRepo := repositories.NewUserRepository(pgxPool)
-	refreshTokenRepo := repositories.NewRefreshTokenRepository(pgxPool) // Пока закомментировал, чтобы линтер не ругался если не используется
+
+	refreshTokenRepo := repositories.NewRefreshTokenRepository(pgxPool)
 	profileRepo := repositories.NewUserProfileRepository(pgxPool)
 
-	smtpPortStr := getEnv("SMTP_PORT", "587")
+	smtpPortStr := getEnv("SMTP_PORT", "1025") // Используем 1025 для Mailpit
 	smtpPort, err := strconv.Atoi(smtpPortStr)
 	if err != nil {
-		fmt.Println("Invalid SMTP port:", err)
+		logger.Error("Invalid SMTP port:", "error", err)
 		return
 	}
 
 	smtpCfg := email.SMTPConfig{
-		Host:     getEnv("SMTP_HOST", "smtp.example.com"),
+		Host:     getEnv("SMTP_HOST", "mailpit"), // Используем 'mailpit' для имени сервиса
 		Port:     smtpPort,
-		Username: getEnv("SMTP_USER", "user@example.com"),
-		Password: getEnv("SMTP_PASSWORD", "secret"),
+		Username: getEnv("SMTP_USER", ""),
+		Password: getEnv("SMTP_PASSWORD", ""),
 		From:     getEnv("SMTP_FROM", "MyService <no-reply@example.com>"),
 	}
 
@@ -70,32 +107,31 @@ func main() {
 
 	emailSender, err := email.NewGomailSender(smtpCfg, templatesDir)
 	if err != nil {
-		fmt.Printf("FAILED to initialize Email Sender: %v\n", err)
+		logger.Error("FAILED to initialize Email Sender", "error", err)
 		return
 	}
 
-	fmt.Println("Email sender initialized successfully")
-
+	logger.Info("Email sender initialized successfully")
 	secretKey := os.Getenv("SECRET_KEY")
 	if secretKey == "" {
-		fmt.Println("SECRET_KEY environment variable is not set")
+		logger.Error("SECRET_KEY environment variable is not set")
 		return
 	}
 
 	accessTTL := os.Getenv("ACCESS_TOKEN_TTL")
 	if accessTTL == "" {
-		fmt.Println("ACCESS_TOKEN_TTL environment variable is not set")
+		logger.Error("ACCESS_TOKEN_TTL environment variable is not set")
 		return
 	}
 	accessTTLInt, err := strconv.Atoi(accessTTL)
 	if err != nil {
-		fmt.Println("Invalid ACCESS_TOKEN_TTL:", err)
+		logger.Error("Invalid ACCESS_TOKEN_TTL:", "error", err)
 		return
 	}
 	userservice := services.NewUserService(userRepo, refreshTokenRepo, emailSender, logger, secretKey, time.Duration(accessTTLInt)*time.Second)
 	profileservice := services.NewProfileService(profileRepo)
 
-	fmt.Println("Services initialized successfully")
+	logger.Info("Services initialized successfully")
 
 	handler := rout.NewHandler(userservice, profileservice, logger)
 	router := handler.InitRoutes()
@@ -104,8 +140,8 @@ func main() {
 	serverHost := serverConfig.Server.Host
 	serverPort := serverConfig.Server.Port
 
-	fmt.Printf("Starting server on %s:%s\n", serverHost, serverPort)
+	logger.Info(fmt.Sprintf("Starting server on %s:%s", serverHost, serverPort))
 	if err := http.ListenAndServe(serverHost+":"+serverPort, router); err != nil {
-		fmt.Println("Failed to start server:", err)
+		logger.Error("Failed to start server", "error", err)
 	}
 }
