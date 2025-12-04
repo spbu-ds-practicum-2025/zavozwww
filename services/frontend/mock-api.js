@@ -66,7 +66,7 @@ window.fetch = async function(...args) {
     
     if (body.username === 'testuser' && body.password === '123456') {
       return new Response(JSON.stringify({
-        token: 'mock_jwt_token',
+        access_token: 'mock_jwt_token',
         user_profile: {
           id: 1,
           username: body.username,
@@ -101,15 +101,13 @@ window.fetch = async function(...args) {
   
   if (url.includes('/api/register') && options?.method === 'POST') {
     return new Response(JSON.stringify({
-      token: 'mock_jwt_token',
+      access_token: 'mock_jwt_token',
       user_profile: {
-        id: 2,
-        username: 'newuser',
-        email: 'new@mail.com',
-        friends: [],
-        regDate: new Date().toLocaleDateString('ru-RU'),
-        countRateFilms: 0,
-        countFriends: 0
+        first_name: "Алексей",
+        second_name: "Алексеев",
+        city: "Алексеево",
+        age: 100,
+        info: "В чащах юга жил-был цитрус — да, но фальшивый экземпляръ!"
       }
     }), { status: 200 })
   }

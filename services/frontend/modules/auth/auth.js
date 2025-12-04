@@ -16,7 +16,7 @@ class AuthManager {
                 <h2>Сперва войдите в свой аккаунт</h2>
                 <form id="login-form" class="auth__form">
                     <div class="auth__form__group">
-                        <input type="text" id="username" placeholder="Логин" required>
+                        <input type="text" id="email" placeholder="Email" required>
                     </div>
                     <div class="auth__form__group">
                         <input type="password" id="login-password" placeholder="Пароль" required>
@@ -45,7 +45,7 @@ class AuthManager {
                         <input type="text" id="username" placeholder="Логин" required>
                     </div>  
                     <div class="auth__form__group">
-                        <input type="email" id="email-username" placeholder="Почта" required>
+                        <input type="email" id="email" placeholder="Email" required>
                     </div>
                     <div class="auth__form__group">
                         <input type="password" id="login-password" placeholder="Пароль" required>
@@ -85,27 +85,24 @@ class AuthManager {
     async login(event) {
         event.preventDefault();
 
-        const username = document.getElementById("username").value;
+        const email = document.getElementById("email").value;
         const password = document.getElementById("login-password").value;
 
-        if (username && password) {
+        if (email && password) {
             //send to server
             try {
-                let data = await api.login(username, password);
-                localStorage.setItem("token", data.token);
-                localStorage.setItem("currentUser", JSON.stringify(data.user_profile));
-                this.token = data.token;
-                this.currentUser = data.user_profile;
+                console.log(email);
+                let data = await api.login(email, password);
+                localStorage.setItem("token", data.access_token);
+                this.token = data.access_token;
                 document.getElementById("navbar").classList.remove("hidden");
                 app.loadPages("search");
             } catch(error){
-                if(error.message != "Network error"){
-                    tempNotice.error("Ошибка, неверный логин или пароль");
-                } else {
-                    tempNotice.error("Ошибка сервера, повторите попытку немного позже");
-                    console.log(error.message);
-                }
+                tempNotice.error("Ошибка, повторите попытку немного позже");
+                console.log(error.message);
             }
+        } else {
+            tempNotice.error("Пожалуйста, заполните все поля");
         }
     }
 
@@ -113,28 +110,83 @@ class AuthManager {
         event.preventDefault();
 
         const username = document.getElementById("username").value;
-        const email = document.getElementById("email-username").value;
+        const email = document.getElementById("email").value;
         const password = document.getElementById("login-password").value;
         
         if (username && email && password) {
             // send to server
             try{
-                let data = await api.registration(username, email, password);
-                this.token = data.token;
-                localStorage.setItem("token", data.token);
-                this.currentUser = data.user_profile;
-                document.getElementById("navbar").classList.remove("hidden");
-                app.loadPages("search");
+                await api.registration(username, email, password);
+                this.renderConfirmCodeForm(email);
             } catch(error) {
-                if(error.message != "Network error"){
-                    tempNotice.error("Ошибка, проверьте еще раз введенные данные");
-                } else {
-                    tempNotice.error("Ошибка сервера, повторите попытку немного позже");
-                    console.log(error.message);
-                }   
+                tempNotice.error("Ошибка, повторите попытку немного позже");
+                console.log(error.message);
             }
         } else {
             tempNotice.error("Пожалуйста, заполните все поля");
         }
+    }
+
+    renderConfirmCodeForm(email) {
+        const mainContent = document.getElementById("main-content");
+
+        mainContent.innerHTML = `
+        <div class="auth">
+            <img src="assets/auth-img.jpg" class="auth__image" />
+            <div class="auth__block">
+                <h1 class="logo_auth">FILMBUDDY</h1>
+                <h2>Мы выслали Вам код на указанный email, пожалуйста введите его для завершения регистрации</h2>
+                <form id="confirm-form" class="auth__form">
+                    <div class="auth__form__group">
+                        <input type="text" id="code" placeholder="Код с почты" required>
+                    </div>
+                    <button class="auth__form__button" id="apply-code" type="submit">Подтвердить</button>
+                    <button class="auth__form__button_sec" id="one-more-time" type="button">Отправить код еще раз</button>
+                </form>
+            </div>
+        </div>
+        `
+
+        this.setupConfirmForm(email);
+    }
+
+    setupConfirmForm(email) {
+        document.getElementById("confirm-form").addEventListener("submit", (event) => {
+            event.preventDefault();
+            const code = document.getElementById("code").value;
+            this.confirm(code, email);
+        });
+
+        document.getElementById("one-more-time").addEventListener("click", () => {
+            this.again(email);
+        });
+    }
+
+    async confirm(code, email) {
+        if(code) {
+            try {
+                let response = await api.confirm(code, email);
+                if(response.status == 200) {
+                    this.renderAuthForm();
+                } else {
+                    throw Error(response.message);
+                }
+            } catch(error) {
+                tempNotice.error("Ошибка, повторите попытку немного позже");
+                console.log(error.message); 
+            }
+        } else {
+            tempNotice.error("Пожалуйста, заполните все поля");
+        }
+    }
+
+    async again(email) {
+        await api.again(email);
+        document.getElementById("one-more-time").classList.add("no-active");
+        document.getElementById("one-more-time").setAttribute("title", "Пожалуйста подождите 30 сек. перед тем как запросить еще раз")
+        setTimeout(() => {
+            document.getElementById("one-more-time").classList.remove("no-active");
+            document.getElementById("one-more-time").removeAttribute("title");
+        }, 30000)
     }
 }

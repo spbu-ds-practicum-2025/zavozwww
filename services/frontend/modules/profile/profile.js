@@ -38,13 +38,7 @@ class ProfileManager {
         }, 10);
 
         document.getElementById("quit").addEventListener("click", () => {
-            profile.classList.remove("show-profile");
-            profile.classList.add("hide-profile");
-            app.profileShowen = false;
-            profile.remove();
-            localStorage.removeItem("token");
-            location.reload();
-
+            this.logout();
         });
 
         const closeHandler = (event) => {
@@ -59,7 +53,18 @@ class ProfileManager {
             }
         }
         document.addEventListener("click", closeHandler);
-    }    
+    }
+    
+    async logout() {
+        const profile = document.querySelector('.profile-container');
+        profile.classList.remove("show-profile");
+        profile.classList.add("hide-profile");
+        app.profileShowen = false;
+        profile.remove();
+        localStorage.removeItem("token");
+        await api.logout();
+        location.reload();
+    }
 }
 
 const profileManager = new ProfileManager();

@@ -60,9 +60,9 @@
 }
 
 .auth__form__button {
-    width: 15em;
+    width: fit-content;
     height: calc(2.5em + 2px);
-    padding: 0.7em;
+    padding: 0.7em 5em;
     font: var(--font-button);
     color: var(--light-grey);
     background-color: var(--blue-grey);
@@ -73,9 +73,9 @@
 }
 
 .auth__form__button_sec {
-    width: 10em;
+    width: fit-content;
     height: calc(1.75em + 2px);
-    padding: 0.2em 0.7em;
+    padding: 0.2em 2.5em;
     font: var(--font-button-sec);
     color: var(--light-grey);
     border: 1px solid var(--light-grey);
@@ -91,4 +91,9 @@
 .auth__form__button_sec:hover {
     background-color: var(--light-grey);
     color: var(--grey);
+}
+
+.no-active {
+    filter: brightness(80%);
+    cursor: not-allowed;
 }

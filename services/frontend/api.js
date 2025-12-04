@@ -3,11 +3,29 @@ class Api {
         this.apiURL = "http://localhost:8080/api";
     }
 
+    async refresh(){
+        try {
+            const response = await fetch(`${this.apiURL}/refresh`, {
+                method: "POST",
+                credentials: "include",
+            });
+            if (response.ok) {
+                const data = await response.json();
+                localStorage.setItem("token", data.access_token);
+                return true;
+            }
+            return false;
+        } catch {
+            return false;
+        }
+    }
+
     async request(endpoint, options = {}){
         let url = `${this.apiURL}${endpoint}`;
         let fetchInit = {
             headers: {
                 "Content-Type": "application/json",
+                "credentials": "include",
                 ...options.headers
             },
             ...options
@@ -22,31 +40,49 @@ class Api {
             let response = await fetch(url, fetchInit);
             let data = await response.json();
 
-            if(response.ok){
-                return data;
-            } else {
-                throw response;
+            if(response.status === 401){
+                const refreshed = await this.refresh();
+                if (refreshed) {
+                    return this.request(endpoint, options);
+                } else {
+                    authManager.renderAuthForm();
+                    throw new Error("Session expired");
+                }
             }
+            
+            return data;
         } catch(error){
-            if(error.status != 401){
-                throw new Error("Network error");
-            }
             throw new Error(error.statusText);
         }
     }
 
-    async login(Username, Password){
+    async login(Email, Password){
         return this.request("/login", {
             method: "POST",
-            body: JSON.stringify({ username: Username, password: Password })
+            body: JSON.stringify({  email: Email,
+                                    password: Password,}),
         });
     }
 
     async registration(Username, Email, Password){
         return this.request("/register", {
             method: "POST",
-            body: JSON.stringify({ email: Email, username: Username, password: Password })
+            body: JSON.stringify({ email: Email, username: Username, password: Password }),
         });
+    }
+
+    async confirm(userCode, Email) {
+        return this.request("/confirm", {
+            method: "POST",
+            body: JSON.stringify({code: userCode, email: Email}),
+        })
+    }
+
+    async again(Email) {
+        return this.request("/again", {
+            method: "POST",
+            body: JSON.stringify({email: Email}),
+        })
     }
 
     async searchMovie(searchQuery, genre) {
@@ -89,6 +125,13 @@ class Api {
         return this.request("/friends/decline/request_id", {
             method: "POST",
             body: JSON.stringify({user_id: userFrom}),
+        })
+    }
+
+    // что отправлять на эндпоинт?
+    async logout(){
+        return this.request("/logout", {
+            method: "POST",
         })
     }
 }
