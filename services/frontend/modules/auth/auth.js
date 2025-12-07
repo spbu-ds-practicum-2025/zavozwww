@@ -165,18 +165,18 @@ class AuthManager {
     async confirm(code, email) {
         if(code) {
             try {
-                let response = await api.confirm(code, email);
-                if(response.status == 200) {
+                const data = await api.confirm(code, email);
+                if(!data.correct) {
                     this.renderAuthForm();
                 } else {
-                    throw Error(response.message);
+                    throw Error("Да пиздец в общем");
                 }
             } catch(error) {
                 tempNotice.error("Ошибка, повторите попытку немного позже");
                 console.log(error.message); 
             }
         } else {
-            tempNotice.error("Пожалуйста, заполните все поля");
+            tempNotice.error("Пожалуйста, заполните поле с кодом");
         }
     }
 

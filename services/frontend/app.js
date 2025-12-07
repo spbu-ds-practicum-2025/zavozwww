@@ -5,10 +5,7 @@ class App {
         }
         this.currentPage = localStorage.getItem("currentPage");
         this.token = localStorage.getItem("token");
-        const userData = localStorage.getItem("currentUser");
-        this.currentUser = userData ? JSON.parse(userData) : null;
         this.notificationSocket = null;
-        this.profileShowen = false;
         this.currentPage = "recomendation";
         this.init();
     }
@@ -52,7 +49,11 @@ class App {
         }
     }
 
-    loadPages(name){
+    async loadPages(name){
+        let data = await api.getProfile();
+        if(data && !data.firstname){
+            profileManager.showProfileForm();
+        }
         if(name != "profile" && name != "notice"){
             this.currentPage = name;
             localStorage.setItem("currentPage", name);
@@ -68,14 +69,7 @@ class App {
                 this.noticeManager.render();
                 break;
             case "profile":
-                if(!this.profileShowen){
-                    this.profileShowen = true;
-                    profileManager.render();
-                } else {
-                    document.querySelector(".profile-container").classList.remove("show-profile");
-                    document.querySelector(".profile-container").classList.add("hide-profile");
-                    this.profileShowen = false;
-                }
+                profileManager.render();
                 break;
             case "friends":
                 friendsManager.render();
@@ -89,6 +83,7 @@ class App {
             <p>Страница уведомлений в разработке</p>
         `;
     }
+
 }
 
 const app = new App();

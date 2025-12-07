@@ -2,10 +2,10 @@ class SearchManager{
     constructor(){
         this.filmManager = new FilmManager();
         this.currentMovies = [];
-        this.currentSearchQuery = '';
-        this.currentGenre = 'all';
+        this.currentSearchQuery = "";
+        this.currentGenre = "all";
         
-        window.addEventListener('popstate', (event) => {
+        window.addEventListener("popstate", (event) => {
             if (event.state && event.state.page === 'search') {
                 this.render(true)
             }

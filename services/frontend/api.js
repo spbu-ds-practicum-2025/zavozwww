@@ -125,15 +125,31 @@ class Api {
         return this.request("/friends/decline/request_id", {
             method: "POST",
             body: JSON.stringify({user_id: userFrom}),
-        })
+        });
     }
 
     // что отправлять на эндпоинт?
     async logout(){
         return this.request("/logout", {
             method: "POST",
-        })
+        });
     }
+
+    async getProfile() {
+        return this.request("/profile");
+    }
+
+    async getFriends() {
+        return this.request("/friends");
+    }
+
+    async setProfile(Firstname, Secondname, Age, City, About) {
+        return this.request("/profile", {
+            method: "POST",
+            body: JSON.stringify({firstname: Firstname, secondname: Secondname, age: Age, city: City, about: About}),
+        });
+    }
+
 }
 
 const api = new Api();

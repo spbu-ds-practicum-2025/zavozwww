@@ -40,10 +40,8 @@ class FriendsManager {
         }
     }
 
-    renderYourFriends(){
-        this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
-        let friends = this.currentUser.friends;
-
+    async renderYourFriends(){
+        let friends = await api.getFriends();
         const yourFriends = document.getElementById("your-friends");
         if(friends.length == 0){
             yourFriends.innerHTML = `
@@ -52,21 +50,30 @@ class FriendsManager {
             return;
         }
 
+        /*
+            <p class="friend-card__title">Имя: <span class="friend-card__data">${friend.name}</span></p>
+            <p class="friend-card__title">Дата регистрации: <span class="friend-card__data">${friend.regDate}</span></p>
+            <div class="profile-activity profile-acticity-friendsPage">
+                <div class="profile-stat profile-stat-friendsPage">
+                    <span class="categorie">Оцененных фильмов:</span>
+                    <span class="number">${friend.countRateFilms}</span>
+                </div>
+                <div class="profile-stat profile-stat-friendsPage">
+                    <span class="categorie">Количество друзей:</span>
+                    <span class="number">${friend.countFriends}</span>
+                </div>
+            </div>
+        */
+
         yourFriends.innerHTML = friends.map(friend => 
             `
             <div class="friend-card">
                 <p class="friend-card__title">Имя: <span class="friend-card__data">${friend.name}</span></p>
-                <p class="friend-card__title">Дата регистрации: <span class="friend-card__data">${friend.regDate}</span></p>
-                <div class="profile-activity">
-                    <div class="profile-stat profile-stat-friendsPage">
-                        <span class="categorie">Оцененных фильмов:</span>
-                        <span class="number">${this.currentUser.countRateFilms}</span>
-                    </div>
-                    <div class="profile-stat profile-stat-friendsPage">
-                        <span class="categorie">Количество друзей:</span>
-                        <span class="number">${this.currentUser.countFriends}</span>
-                    </div>
-                </div>
+                <p class="friend-card__title">Имя: <span class="friend-card__data">${friend.firstname}</span></p>
+                <p class="friend-card__title"> Фамилия: <span class="friend-card__data">${friend.secondname}</span></p>
+                <p class="friend-card__title">Город: <span class="friend-card__data">${friend.city}</span></p>
+                <p class="friend-card__title">Возвраст: <span class="friend-card__data">${friend.age}</span></p>
+                <p class="friend-card__title">О Вас: <span class="friend-card__data">${friend.info}</span></p>
             </div>
             `
         ).join("");
@@ -86,17 +93,11 @@ class FriendsManager {
             `
             <div class="friend-card">
                 <p class="friend-card__title">Имя: <span class="friend-card__data">${friend.name}</span></p>
-                <p class="friend-card__title">Дата регистрации: <span class="friend-card__data">${friend.regDate}</span></p>
-                <div class="profile-activity profile-acticity-friendsPage">
-                    <div class="profile-stat profile-stat-friendsPage">
-                        <span class="categorie">Оцененных фильмов:</span>
-                        <span class="number">${friend.countRateFilms}</span>
-                    </div>
-                    <div class="profile-stat profile-stat-friendsPage">
-                        <span class="categorie">Количество друзей:</span>
-                        <span class="number">${friend.countFriends}</span>
-                    </div>
-                </div>
+                <p class="friend-card__title">Имя: <span class="friend-card__data">${friend.firstname}</span></p>
+                <p class="friend-card__title"> Фамилия: <span class="friend-card__data">${friend.secondname}</span></p>
+                <p class="friend-card__title">Город: <span class="friend-card__data">${friend.city}</span></p>
+                <p class="friend-card__title">Возвраст: <span class="friend-card__data">${friend.age}</span></p>
+                <p class="friend-card__title">О Вас: <span class="friend-card__data">${friend.info}</span></p>
                 <button class="friend-card__add-btn" onclick="friendsManager.sendRequest(${friend.name})">Добавить в друзья</button>
             </div>
             `

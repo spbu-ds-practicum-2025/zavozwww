@@ -8,6 +8,7 @@
 @import url("modules/friends/friends.css");
 @import url("modules/temp-notice/temp-notice.css");
 @import url("modules/navbar/navbar.css");
+@import url("modules/setProfile/setProfile.css");
 
 * {
     padding: 0;

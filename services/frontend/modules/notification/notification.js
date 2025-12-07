@@ -33,7 +33,7 @@ class NoticeManager {
             notice.innerHTML = Array.from(this.notifications.values()).map(note => 
                 `
                 <div id="request-${note.user_id}" class="notice-card">
-                    <p class="notice-card__message">Вам запрос на дружбу от <span class="from-request">${note.username}</span></p>
+                    <p class="notice-card__message">Вам запрос на дружбу от <span class="from-request">${note.firstname} ${note.secondname}</span></p>
                     <div class="notice-card__actions">
                     <button class="btn accept-btn" data-id="${note.user_id}" class"notice-card__accept-btn">Принять</button>
                     <button class="btn decline-btn" data-id="${note.user_id}" class="notice-card__decline-btn">Отклонить</button>

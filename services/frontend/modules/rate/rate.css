@@ -88,9 +88,8 @@
 
 .rate-btn {
     align-self: center;
-    width: 10em;
-    height: calc(2.5em + 2px);
-    padding: 0.7em;
+    display: inline-block;
+    padding: 0.75em 3em;
     font: var(--font-button);
     color: var(--light-grey);
     background-color: var(--blue-grey);

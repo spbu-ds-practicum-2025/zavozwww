@@ -1,0 +1,66 @@
+.setProfile-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.setProfile-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: 0.4;
+    z-index: -1;
+}
+
+.save-title {
+    font: var(--font-title);
+}
+
+.save-btn {
+    align-self: center;
+    display: inline-block;
+    padding: 0.75em 3em;
+    font: var(--font-button);
+    color: var(--light-grey);
+    background-color: var(--blue-grey);
+    border-radius: 0.65em;
+    cursor: pointer;
+    transition: filter 0.1s ease;
+
+}
+
+.save-btn:hover {
+    filter: brightness(130%);
+}
+
+.about {
+    resize: none;
+    width: 100%;
+    height: 10em;
+    padding: 0.5em;
+    color: var(--light-grey);
+    font: var(--font-text);
+    background-color: var(--grey);
+    border: 1px solid var(--light-grey);
+    border-radius: 5px;
+}
+
+.about::placeholder {
+    color: var(--blue-grey);
+    font: var(--font-text);
+}
+
+.setProfile {
+    margin-top: 15dvh;
+    margin-bottom: 15dvh;
+}
