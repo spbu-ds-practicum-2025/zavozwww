@@ -45,7 +45,7 @@ func main() {
 	logger, err := logger.NewLogger()
 	if err != nil {
 		fmt.Println("Error initializing logger:", "error", err)
-		return 
+		return
 	}
 	logger.Info("Logger initialized successfully.")
 
@@ -88,7 +88,7 @@ func main() {
 	refreshTokenRepo := repositories.NewRefreshTokenRepository(pgxPool)
 	profileRepo := repositories.NewUserProfileRepository(pgxPool)
 
-	smtpPortStr := getEnv("SMTP_PORT", "1025") // Используем 1025 для Mailpit
+	smtpPortStr := getEnv("SMTP_PORT", "1025")
 	smtpPort, err := strconv.Atoi(smtpPortStr)
 	if err != nil {
 		logger.Error("Invalid SMTP port:", "error", err)
@@ -96,7 +96,7 @@ func main() {
 	}
 
 	smtpCfg := email.SMTPConfig{
-		Host:     getEnv("SMTP_HOST", "mailpit"), // Используем 'mailpit' для имени сервиса
+		Host:     getEnv("SMTP_HOST", "mailpit"),
 		Port:     smtpPort,
 		Username: getEnv("SMTP_USER", ""),
 		Password: getEnv("SMTP_PASSWORD", ""),

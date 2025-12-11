@@ -18,6 +18,7 @@ require (
 )
 
 require (
+	github.com/BALLUUNN/zavozww v0.0.0-20251002061846-ed5eb398981f // indirect
 	github.com/BurntSushi/toml v1.2.1 // indirect
 	github.com/ajg/form v1.5.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
