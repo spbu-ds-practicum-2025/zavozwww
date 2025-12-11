@@ -169,7 +169,7 @@ class AuthManager {
                 if(!data.correct) {
                     this.renderAuthForm();
                 } else {
-                    throw Error("Да пиздец в общем");
+                    throw Error("Uncorrect data");
                 }
             } catch(error) {
                 tempNotice.error("Ошибка, повторите попытку немного позже");

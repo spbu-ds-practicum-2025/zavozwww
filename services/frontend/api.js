@@ -5,13 +5,20 @@ class Api {
 
     async refresh(){
         try {
+            const refreshToken = localStorage.getItem("refresh_token");
+        if (!refreshToken) return false;
+
             const response = await fetch(`${this.apiURL}/refresh`, {
                 method: "POST",
-                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({refresh_token: refreshToken})
             });
             if (response.ok) {
                 const data = await response.json();
                 localStorage.setItem("token", data.access_token);
+                localStorage.setItem("refresh_token", data.refresh_token);
                 return true;
             }
             return false;
@@ -25,7 +32,6 @@ class Api {
         let fetchInit = {
             headers: {
                 "Content-Type": "application/json",
-                "credentials": "include",
                 ...options.headers
             },
             ...options
@@ -35,33 +41,45 @@ class Api {
         if(token){
             fetchInit.headers["Authorization"] = `Bearer ${token}`;
         }
-
         try {
             let response = await fetch(url, fetchInit);
-            let data = await response.json();
 
-            if(response.status === 401){
+            if(response.status === 401 && !endpoint.includes("/login")){
                 const refreshed = await this.refresh();
                 if (refreshed) {
+                    const newToken = localStorage.getItem("token");
+                    fetchInit.headers["Authorization"] = `Bearer ${newToken}`;
                     return this.request(endpoint, options);
                 } else {
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("refresh_token");
                     authManager.renderAuthForm();
                     throw new Error("Session expired");
                 }
             }
+
+            let data = await response.json();
+            if(!response.ok) {
+                throw new Error(data.message || response.statusText);
+            }
             
             return data;
         } catch(error){
-            throw new Error(error.statusText);
+            throw new Error(error.message);
         }
     }
 
     async login(Email, Password){
-        return this.request("/login", {
+        const data = await this.request("/login", {
             method: "POST",
             body: JSON.stringify({  email: Email,
                                     password: Password,}),
         });
+
+        if (data.access_token) localStorage.setItem("token", data.access_token);
+        if (data.refresh_token) localStorage.setItem("refresh_token", data.refresh_token);
+        
+        return data;
     }
 
     async registration(Username, Email, Password){
@@ -130,6 +148,8 @@ class Api {
 
     // что отправлять на эндпоинт?
     async logout(){
+        localStorage.removeItem("token");
+        localStorage.removeItem("refresh_token");
         return this.request("/logout", {
             method: "POST",
         });

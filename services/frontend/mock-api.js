@@ -129,7 +129,7 @@
       }
       return jsonResponse(
         { error: "Invalid credentials" },
-        { status: 401, statusText: "invalid data" }
+        { status: 402, statusText: "invalid data" }
       );
     }
 
