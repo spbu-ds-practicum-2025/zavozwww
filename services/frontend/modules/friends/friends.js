@@ -92,7 +92,6 @@ class FriendsManager {
         results.innerHTML = friendsArray.map(friend => 
             `
             <div class="friend-card">
-                <p class="friend-card__title">Имя: <span class="friend-card__data">${friend.name}</span></p>
                 <p class="friend-card__title">Имя: <span class="friend-card__data">${friend.firstname}</span></p>
                 <p class="friend-card__title"> Фамилия: <span class="friend-card__data">${friend.secondname}</span></p>
                 <p class="friend-card__title">Город: <span class="friend-card__data">${friend.city}</span></p>

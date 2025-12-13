@@ -51,7 +51,7 @@ class App {
 
     async loadPages(name){
         let data = await api.getProfile();
-        if(data && !data.firstname){
+        if(!data.first_name || !data.last_name || !data.age || !data.city || !data.info){
             profileManager.showProfileForm();
         }
         if(name != "profile" && name != "notice"){

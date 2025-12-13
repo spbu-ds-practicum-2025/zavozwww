@@ -6,7 +6,7 @@ class Api {
     async refresh(){
         try {
             const refreshToken = localStorage.getItem("refresh_token");
-        if (!refreshToken) return false;
+            if (!refreshToken) return false;
 
             const response = await fetch(`${this.apiURL}/refresh`, {
                 method: "POST",
@@ -14,7 +14,7 @@ class Api {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({refresh_token: refreshToken})
-            });
+            }); 
             if (response.ok) {
                 const data = await response.json();
                 localStorage.setItem("token", data.access_token);
@@ -58,9 +58,15 @@ class Api {
                 }
             }
 
-            let data = await response.json();
+            let data = {};
+            const text = await response.text();
             if(!response.ok) {
                 throw new Error(data.message || response.statusText);
+            }
+            try {
+                data = text ? JSON.parse(text) : {};
+            } catch (error) {
+                throw new Error("Server returned non-JSON response");
             }
             
             return data;
@@ -163,10 +169,10 @@ class Api {
         return this.request("/friends");
     }
 
-    async setProfile(Firstname, Secondname, Age, City, About) {
+    async setProfile(Firstname, Lastname, Age, City, Info) {
         return this.request("/profile", {
             method: "POST",
-            body: JSON.stringify({firstname: Firstname, secondname: Secondname, age: Age, city: City, about: About}),
+            body: JSON.stringify({first_name: Firstname, last_name: Lastname, age: Age, city: City, info: Info}),
         });
     }
 

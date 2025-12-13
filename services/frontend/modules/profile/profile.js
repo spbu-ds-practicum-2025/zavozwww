@@ -29,8 +29,8 @@ class ProfileManager {
         profile.innerHTML= `
             <div class="profile-content">
                 <div class="profile">
-                    <p class="profile__title">Имя: <span class="profile__data">${this.currentUser.firstname}</span></p>
-                    <p class="profile__title"> Фамилия: <span class="profile__data">${this.currentUser.secondname}</span></p>
+                    <p class="profile__title">Имя: <span class="profile__data">${this.currentUser.first_name}</span></p>
+                    <p class="profile__title"> Фамилия: <span class="profile__data">${this.currentUser.second_name}</span></p>
                     <p class="profile__title">Город: <span class="profile__data">${this.currentUser.city}</span></p>
                     <p class="profile__title">Возвраст: <span class="profile__data">${this.currentUser.age}</span></p>
                     <p class="profile__title">О Вас: <span class="profile__data">${this.currentUser.info}</span></p>
