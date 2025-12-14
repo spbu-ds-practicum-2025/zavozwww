@@ -16,10 +16,6 @@ class FilmBuddyRecommender:
         self.train_model()
 
     def load_data(self):
-        """
-        Умная загрузка данных MovieLens 100k.
-        Если файлов нет — генерирует демо-данные.
-        """
         genre_map = {
             'Action': 'Боевик', 'Adventure': 'Приключения', 'Animation': 'Мультфильм',
             'Children': 'Детский', 'Comedy': 'Комедия', 'Crime': 'Криминал',
