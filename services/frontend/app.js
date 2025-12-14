@@ -69,7 +69,7 @@ class App {
                 this.noticeManager.render();
                 break;
             case "profile":
-                profileManager.render();
+                profileManager.render(data);
                 break;
             case "friends":
                 friendsManager.render();

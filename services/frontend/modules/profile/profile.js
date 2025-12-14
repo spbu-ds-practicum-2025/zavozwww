@@ -7,12 +7,10 @@ class ProfileManager {
     async getUser() {
         return await api.getProfile();
     }
-    render() {
-        console.log("start render");
+    render(data) {
         if (document.querySelector('.profile-container')) {
             return;
         }
-        console.log("update user info")
         /*
         <div class="profile-activity">
             <div class="profile-stat profile-stat-profilePage">
@@ -25,9 +23,8 @@ class ProfileManager {
             </div>
         </div>
         */
-        this.currentUser = this.getUser();
+        this.currentUser = data;
         console.log(this.currentUser);
-        console.log("user data was updated");
         const profile = document.createElement("div");
         profile.classList.add("profile-container");
         profile.innerHTML= `

@@ -153,12 +153,15 @@ class Api {
     }
 
     async logout(refreshToken){
-        localStorage.removeItem("token");
-        localStorage.removeItem("refresh_token");
-        return this.request("/logout", {
-            method: "POST",
-            body: JSON.stringify({refresh_token: refreshToken})
-        });
+        try {
+            await this.request("/logout", {
+                method: "POST",
+                body: JSON.stringify({refresh_token: refreshToken})
+            });
+        } finally {
+            localStorage.removeItem("token");
+            localStorage.removeItem("refresh_token");
+        }
     }
 
     async getProfile() {
