@@ -6,7 +6,7 @@ class App {
         this.currentPage = localStorage.getItem("currentPage");
         this.token = localStorage.getItem("token");
         this.notificationSocket = null;
-        this.currentPage = "recomendation";
+        this.currentPage = "search";
         this.init();
     }
 
@@ -60,7 +60,7 @@ class App {
         } 
         switch(name){
             case "search":
-                searchManager.render();
+                searchManager.render(); 
                 break;
             case "recomendation":
                 recomendationManager.render();

@@ -1,16 +1,18 @@
 class ProfileManager {
     constructor() {
-        this.currentUser = this.getUser();
+        this.currentUser = undefined;
+        console.log(this.currentUser);
     }
 
     async getUser() {
         return await api.getProfile();
     }
     render() {
+        console.log("start render");
         if (document.querySelector('.profile-container')) {
             return;
         }
-        
+        console.log("update user info")
         /*
         <div class="profile-activity">
             <div class="profile-stat profile-stat-profilePage">
@@ -23,14 +25,16 @@ class ProfileManager {
             </div>
         </div>
         */
-
+        this.currentUser = this.getUser();
+        console.log(this.currentUser);
+        console.log("user data was updated");
         const profile = document.createElement("div");
         profile.classList.add("profile-container");
         profile.innerHTML= `
             <div class="profile-content">
                 <div class="profile">
                     <p class="profile__title">Имя: <span class="profile__data">${this.currentUser.first_name}</span></p>
-                    <p class="profile__title"> Фамилия: <span class="profile__data">${this.currentUser.second_name}</span></p>
+                    <p class="profile__title"> Фамилия: <span class="profile__data">${this.currentUser.last_name}</span></p>
                     <p class="profile__title">Город: <span class="profile__data">${this.currentUser.city}</span></p>
                     <p class="profile__title">Возвраст: <span class="profile__data">${this.currentUser.age}</span></p>
                     <p class="profile__title">О Вас: <span class="profile__data">${this.currentUser.info}</span></p>
@@ -69,8 +73,7 @@ class ProfileManager {
         profile.classList.add("hide-profile");
         app.profileShowen = false;
         profile.remove();
-        localStorage.removeItem("token");
-        await api.logout();
+        await api.logout(localStorage.getItem("refresh_token"));
         location.reload();
     }
 
@@ -112,15 +115,16 @@ class ProfileManager {
         try{
             const firstname = document.getElementById("firstname").value; 
             const secondname = document.getElementById("secondname").value; 
-            const age = document.getElementById("age").value; 
+            const age = Number(document.getElementById("age").value); 
             const city = document.getElementById("city").value; 
             const about = document.querySelector(".about").value;
-            if(firstname && secondname && age && city) {
+            if(firstname && secondname && age && city && info) {
                 await api.setProfile(firstname, secondname, age, city, about);
                 document.body.removeChild(document.querySelector(".setProfile-container"));
+                app.loadPages("search");
                 tempNotice.success("Данные профиля сохранены!");
             } else {
-                console.log("else ALDLAMKSDMLASD");
+                console.log("else");
                 tempNotice.error("Заполните все поля");
             }
         } catch(error) {

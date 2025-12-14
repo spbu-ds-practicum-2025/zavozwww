@@ -1,6 +1,6 @@
 class Api {
     constructor(){
-        this.apiURL = "http://localhost:8080/api";
+        this.apiURL = "http://localhost:8080/filmbuddy";
     }
 
     async refresh(){
@@ -20,7 +20,7 @@ class Api {
                 localStorage.setItem("token", data.access_token);
                 localStorage.setItem("refresh_token", data.refresh_token);
                 return true;
-            }
+            } e
             return false;
         } catch {
             return false;
@@ -60,7 +60,7 @@ class Api {
 
             let data = {};
             const text = await response.text();
-            if(!response.ok) {
+            if(!response.ok && response.status != 500) {
                 throw new Error(data.message || response.statusText);
             }
             try {
@@ -96,7 +96,7 @@ class Api {
     }
 
     async confirm(userCode, Email) {
-        return this.request("/confirm", {
+        return this.request("/verify", {
             method: "POST",
             body: JSON.stringify({code: userCode, email: Email}),
         })
@@ -152,17 +152,21 @@ class Api {
         });
     }
 
-    // что отправлять на эндпоинт?
-    async logout(){
+    async logout(refreshToken){
         localStorage.removeItem("token");
         localStorage.removeItem("refresh_token");
         return this.request("/logout", {
             method: "POST",
+            body: JSON.stringify({refresh_token: refreshToken})
         });
     }
 
     async getProfile() {
-        return this.request("/profile");
+        console.log("try to get user data");
+        const data = this.request("/profile");
+        console.log(data);
+        return data;
+        //return this.request("/profile");
     }
 
     async getFriends() {
