@@ -27,8 +27,10 @@ class Api {
         }
     }
 
-    async request(endpoint, options = {}){
-        let url = `${this.apiURL}${endpoint}`;
+    async request(endpoint, options = {}, urlService = this.apiURL){
+        loaderManager.show();
+
+        let url = `${urlService}${endpoint}`;
         let fetchInit = {
             headers: {
                 "Content-Type": "application/json",
@@ -72,7 +74,10 @@ class Api {
             return data;
         } catch(error){
             throw new Error(error.message);
+        } finally {
+            loaderManager.hide();
         }
+
     }
 
     async login(Email, Password){
@@ -103,7 +108,7 @@ class Api {
     }
 
     async again(Email) {
-        return this.request("/again", {
+        return this.request("/resend-verification", {
             method: "POST",
             body: JSON.stringify({email: Email}),
         })
@@ -165,15 +170,13 @@ class Api {
     }
 
     async getProfile() {
-        console.log("try to get user data");
-        const data = this.request("/profile");
-        console.log(data);
+        const data = await this.request("/profile");
         return data;
-        //return this.request("/profile");
     }
 
     async getFriends() {
-        return this.request("/friends");
+        const data = await this.request("/friends");
+        return data;
     }
 
     async setProfile(Firstname, Lastname, Age, City, Info) {

@@ -4,8 +4,8 @@ class RecomendationManager {
         this.currentMovies = [];
         
         window.addEventListener('popstate', (event) => {
-            if (event.state && event.state.page === 'search') {
-                this.render(true)
+            if (event.state && event.state.page === 'recomendation') {
+                this.render()
             }
         });
     }

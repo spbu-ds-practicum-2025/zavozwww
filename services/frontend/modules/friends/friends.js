@@ -68,9 +68,8 @@ class FriendsManager {
         yourFriends.innerHTML = friends.map(friend => 
             `
             <div class="friend-card">
-                <p class="friend-card__title">Имя: <span class="friend-card__data">${friend.name}</span></p>
-                <p class="friend-card__title">Имя: <span class="friend-card__data">${friend.firstname}</span></p>
-                <p class="friend-card__title"> Фамилия: <span class="friend-card__data">${friend.secondname}</span></p>
+                <p class="friend-card__title">Имя: <span class="friend-card__data">${friend.first_name}</span></p>
+                <p class="friend-card__title"> Фамилия: <span class="friend-card__data">${friend.last_name}</span></p>
                 <p class="friend-card__title">Город: <span class="friend-card__data">${friend.city}</span></p>
                 <p class="friend-card__title">Возвраст: <span class="friend-card__data">${friend.age}</span></p>
                 <p class="friend-card__title">О Вас: <span class="friend-card__data">${friend.info}</span></p>
@@ -84,7 +83,7 @@ class FriendsManager {
         
         if(friendsArray.length == 0){
             results.innerHTML = `
-            <p class="friends-page__without-friends">Просстите, но мы не можем найти такого пользователя</p>
+            <p class="friends-page__without-friends">Простите, но мы не можем найти такого пользователя</p>
             `
             return;
         }
@@ -92,8 +91,8 @@ class FriendsManager {
         results.innerHTML = friendsArray.map(friend => 
             `
             <div class="friend-card">
-                <p class="friend-card__title">Имя: <span class="friend-card__data">${friend.firstname}</span></p>
-                <p class="friend-card__title"> Фамилия: <span class="friend-card__data">${friend.secondname}</span></p>
+                <p class="friend-card__title">Имя: <span class="friend-card__data">${friend.first_name}</span></p>
+                <p class="friend-card__title"> Фамилия: <span class="friend-card__data">${friend.last_name}</span></p>
                 <p class="friend-card__title">Город: <span class="friend-card__data">${friend.city}</span></p>
                 <p class="friend-card__title">Возвраст: <span class="friend-card__data">${friend.age}</span></p>
                 <p class="friend-card__title">О Вас: <span class="friend-card__data">${friend.info}</span></p>
