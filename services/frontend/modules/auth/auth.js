@@ -97,6 +97,7 @@ class AuthManager {
                 this.token = data.access_token;
                 document.getElementById("navbar").classList.remove("hidden");
                 app.loadPages("search");
+                app.noticeManager.start();
             } catch(error){
                 tempNotice.error("Ошибка, повторите попытку немного позже");
                 console.log(error.message);

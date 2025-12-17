@@ -1,8 +1,6 @@
 class NoticeManager {
     constructor() {
         // this.socket = notificationSocket;
-        this.haveNotice = false;
-        this.token = localStorage.getItem("token");
         this.notifications = [];
         this.waitRequest = false;
         /*
@@ -36,7 +34,7 @@ class NoticeManager {
     async getNotifications() {
         try {
             const data = await api.getNotice(); 
-            const newNotifications = data.notifications || [];
+            const newNotifications = data || [];
 
             if (JSON.stringify(newNotifications) !== JSON.stringify(this.notifications)) {
                 this.notifications = newNotifications;
@@ -69,11 +67,11 @@ class NoticeManager {
         if(this.notifications.length > 0){
             notice.innerHTML = this.notifications.map(note => 
                 `
-                <div id="request-${note.username}" class="notice-card">
-                    <p class="notice-card__message">Вам запрос на дружбу от <span class="from-request">${note.username}</span><span class="date-request">${new Date(note.createDate).toLocaleDateString()}</span></p>
+                <div id="request-${note.from_username}" class="notice-card">
+                    <p class="notice-card__message">Вам запрос на дружбу от <span class="from-request">${note.from_username} </span><span class="date-request">${new Date(note.created_at).toLocaleDateString()}</span></p>
                     <div class="notice-card__actions">
-                    <button class="btn accept-btn" data-id="${note.username}">Принять</button>
-                    <button class="btn decline-btn" data-id="${note.username}">Отклонить</button>
+                    <button class="btn accept-btn" data-id="${note.request_id}">Принять</button>
+                    <button class="btn decline-btn" data-id="${note.request_id}">Отклонить</button>
                     </div>
                 </div>
                 `
@@ -126,7 +124,7 @@ class NoticeManager {
     async acceptRequest(userFrom){
         try {
             await api.acceptRequest(userFrom);
-            this.notifications.delete(Number(userFrom));
+            this.notifications = this.notifications.filter(note => note.from_username !== userFrom);
             document.getElementById(`request-${userFrom}`).remove();
             tempNotice.success("Вы приняли запрос на дружбу"); 
             this.render();
@@ -139,7 +137,7 @@ class NoticeManager {
     async declineRequest(userFrom){
         try {
             await api.declineRequest(userFrom);
-            this.notifications.delete(Number(userFrom));
+            this.notifications = this.notifications.filter(note => note.from_username !== userFrom);
             document.getElementById(`request-${userFrom}`).remove();
             tempNotice.success("Вы отклонили запрос на дружбу"); 
             this.render();

@@ -94,7 +94,7 @@ class FriendsManager {
         ).join("");
         
         results.addEventListener("click", (event) => {
-            if (event.target.classList.contains("friend-card_add-btn")) {
+            if (event.target.classList.contains("friend-card__add-btn")) {
                 const username = event.target.dataset.username;
                 friendsManager.sendRequest(username);
             }

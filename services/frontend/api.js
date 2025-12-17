@@ -49,7 +49,7 @@ class Api {
         try {
             let response = await fetch(url, fetchInit);
 
-            if(response.status === 401 && !endpoint.includes("/login")){
+            if(response.status === 401 && !endpoint.includes("/login") && !endpoint.includes("/register")){
                 const refreshed = await this.refresh();
                 if (refreshed) {
                     const newToken = localStorage.getItem("token");
@@ -144,28 +144,27 @@ class Api {
     async addFriend(FromName, ToName) {
         return this.request("/friends/requests", {
            method: "POST",
-           body: JSON.stringify({from_username: FromName, to_name: ToName}),
+           body: JSON.stringify({from_username: FromName, to_username: ToName}),
        }, "http://localhost:8082/social");
     }
 
     async getNotice() {
-        const data = await api.request("/friends/requests");
+        const data = await api.request("/friends/requests", {}, "http://localhost:8082/social");
         return data;
-
     }
 
-    async acceptRequest(userFrom) {
+    async acceptRequest(Request_id) {
         return this.request("/friends/requests/accept", {
             method: "POST",
-            body: JSON.stringify({username: userFrom}),
+            body: JSON.stringify({request_id: Request_id}),
         }, "http://localhost:8082/social");
     }
 
-    async declineRequest(userFrom) {
-        return this.request("/friends/req/request_id", {
+    async declineRequest(Request_id) {
+        return this.request("/friends/requests/reject", {
             method: "POST",
-            body: JSON.stringify({username: userFrom}),
-        });
+            body: JSON.stringify({request_id: Request_id}),
+        }, "http://localhost:8082/social");
     }
 
     async logout(refreshToken){

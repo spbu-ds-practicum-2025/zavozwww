@@ -6,7 +6,7 @@ class App {
         this.currentPage = localStorage.getItem("currentPage");
         this.token = localStorage.getItem("token");
         // this.notificationSocket = null;
-        this.currentPage = "search";
+        // this.currentPage = "search";
         this.noticeManager = new NoticeManager();
         this.init();
     }
