@@ -11,18 +11,7 @@ class ProfileManager {
         if (document.querySelector('.profile-container')) {
             return;
         }
-        /*
-        <div class="profile-activity">
-            <div class="profile-stat profile-stat-profilePage">
-                <span class="categorie">Оцененных фильмов:</span>
-                <span class="number">${this.currentUser.countRateFilms}</span>
-            </div>
-            <div class="profile-stat profile-stat-profilePage">
-                <span class="categorie">Количество друзей:</span>
-                <span class="number">${this.currentUser.countFriends}</span>
-            </div>
-        </div>
-        */
+       
         this.currentUser = data;
         console.log(this.currentUser);
         const profile = document.createElement("div");
@@ -30,6 +19,7 @@ class ProfileManager {
         profile.innerHTML= `
             <div class="profile-content">
                 <div class="profile">
+                    <p class="profile__title">Никнейм: <span class="profile__data">${this.currentUser.username}</span></p>
                     <p class="profile__title">Имя: <span class="profile__data">${this.currentUser.first_name}</span></p>
                     <p class="profile__title"> Фамилия: <span class="profile__data">${this.currentUser.last_name}</span></p>
                     <p class="profile__title">Город: <span class="profile__data">${this.currentUser.city}</span></p>
@@ -74,7 +64,7 @@ class ProfileManager {
         location.reload();
     }
 
-    showProfileForm() {
+    showProfileForm(username) {
         if(document.querySelector("setProfile-container")) {
             return;
         }
@@ -96,7 +86,7 @@ class ProfileManager {
                     <input type="text" id="city" placeholder="Город" required>
                 </div>
                 <textarea class="about" placeholder="Расскажите о себе"></textarea>
-                <button id="save" class="save-btn">Сохранить</button>
+                <button id="save" type="button" class="save-btn">Сохранить</button>
             </div>
         `
 
@@ -104,27 +94,34 @@ class ProfileManager {
 
         document.getElementById("save").addEventListener("click", () => {
             console.log("CLICK");
-            this.setProfile();
+            this.setProfile(username);
         });
     }
 
-    async setProfile() {
+    async setProfile(username) {
         try{
             const firstname = document.getElementById("firstname").value; 
             const secondname = document.getElementById("secondname").value; 
             const age = Number(document.getElementById("age").value); 
             const city = document.getElementById("city").value; 
             const about = document.querySelector(".about").value;
-            if(firstname && secondname && age && city && info) {
-                await api.setProfile(firstname, secondname, age, city, about);
+
+            console.log("Данные формы:", { firstname, secondname, age, city, about });
+
+            if(firstname && secondname && age && city) {
+                console.log("Отправка запроса setProfile...");
+                await api.setProfile(username, firstname, secondname, age, city, about);
+                console.log("Запрос setProfile выполнен успешно");
+                
                 document.body.removeChild(document.querySelector(".setProfile-container"));
                 app.loadPages("search");
                 tempNotice.success("Данные профиля сохранены!");
             } else {
-                console.log("else");
-                tempNotice.error("Заполните все поля");
+                console.log("Проверка полей не пройдена");
+                tempNotice.error("Заполните обязательные поля (Имя, Фамилия, Возраст, Город)");
             }
         } catch(error) {
+            console.error("Ошибка в setProfile:", error);
             tempNotice.error("Ошибка, попробуйте еще раз через некоторое время");
         }
     }

@@ -14,7 +14,7 @@ class RecomendationManager {
         let movies = await api.recomendation();
         const mainContent = document.getElementById("main-content");
         mainContent.innerHTML = `
-            <div class="recomendations-page">
+            <div class="main-page">
                 <h1 class="recomendations-page__title">Рекомедации</h1>
                 <div class="results" id="recomendations-results">
                 </div>

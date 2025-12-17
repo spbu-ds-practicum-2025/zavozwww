@@ -1,11 +1,6 @@
 @import url("../movie-card/movie-card.css");
 @import url("../rate/rate.css");
 
-.search-page {
-    margin: 0px 64px;
-    margin-bottom: 2em;
-}
-
 .search-page__title {
     color: var(--light-grey);
     font: var(--font-title);

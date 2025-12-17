@@ -40,6 +40,10 @@
     font: var(--font-small-title);
 }
 
+.date-request {
+    font: var(--font-text);
+}
+
 .notice-card__actions {
     display: flex;
     gap: 1em;
@@ -55,12 +59,17 @@
     transition: filter 0.1s ease;
 }
 
-.button:hover {
+.btn:hover {
     filter: brightness(80%);
 }
 
 .accept-btn {
     background-color: var(--blue-grey);
+
+}
+
+.search-box__button:hover {
+    filter: brightness(130%);
 }
 
 .decline-btn {

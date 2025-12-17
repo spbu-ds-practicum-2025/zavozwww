@@ -1,0 +1,43 @@
+.rated-movies__title {
+    color: var(--light-grey);
+    font: var(--font-title);
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+}
+
+.rated-movies__results {
+    display: flex;
+    flex-direction: column;
+    color: var(--light-grey);
+    gap: 1.5em;
+}
+
+.rated-movies__results__without {
+    font: var(--font-text);
+}
+
+.rated-movies__results__film {
+    padding: 2em;
+    background-color: var(--grey);
+    border-radius: 0.65em;
+    display: grid;
+    grid-template-columns: repeat(1fr, 3);
+    justify-content: space-between;
+}
+
+.rated-movies__results__film__title {
+    font: var(--font-small-title);
+}
+
+.rated-movies__results__film__grade {
+    font: var(--font-text);
+}
+
+.rated-movies__results__film__createdAt {
+    font: var(--font-text);
+}
+
+.rated-movies__results__film__review {
+    font: var(--font-text);
+    grid-column: span 3;
+}

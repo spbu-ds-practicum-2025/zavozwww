@@ -15,7 +15,7 @@ class SearchManager{
     render(restore = false){
         const mainContent = document.getElementById("main-content");
         mainContent.innerHTML = `
-            <div class="search-page">
+            <div class="main-page">
                 <h1 class="search-page__title">Поиск фильмов</h1>
                 <div class="search-box">
                     <input type="text" id="film-search" class="search-box__input" placeholder="Название фильма...">

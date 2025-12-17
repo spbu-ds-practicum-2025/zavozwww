@@ -1,11 +1,6 @@
 @import url("../search/search.css");
 @import url("../profile/profile.css");
 
-.friends-page {
-    margin: 0px 64px;
-    margin-bottom: 2em;
-}
-
 .friends-page__title {
     color: var(--light-grey);
     font: var(--font-title);

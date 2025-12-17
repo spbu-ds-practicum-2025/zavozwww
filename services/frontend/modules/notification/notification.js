@@ -7,7 +7,7 @@ class NoticeManager {
         this.socket.onmessage = (event) => {
             const notification = JSON.parse(event.data);
             document.querySelector(".navbar__content__pages__notice").classList.add("haveNotice");
-            this.notifications.set(notification.user_id, notification);
+            this.notifications.set(notification.username, notification);
         }   
     }
 
@@ -32,11 +32,11 @@ class NoticeManager {
         if(this.notifications.size > 0){
             notice.innerHTML = Array.from(this.notifications.values()).map(note => 
                 `
-                <div id="request-${note.user_id}" class="notice-card">
-                    <p class="notice-card__message">Вам запрос на дружбу от <span class="from-request">${note.firstname} ${note.secondname}</span></p>
+                <div id="request-${note.username}" class="notice-card">
+                    <p class="notice-card__message">Вам запрос на дружбу от <span class="from-request">${note.username}</span><span class="date-request">${new Date(note.createDate).toLocaleDateString()}</span></p>
                     <div class="notice-card__actions">
-                    <button class="btn accept-btn" data-id="${note.user_id}" class"notice-card__accept-btn">Принять</button>
-                    <button class="btn decline-btn" data-id="${note.user_id}" class="notice-card__decline-btn">Отклонить</button>
+                    <button class="btn accept-btn" data-id="${note.username}">Принять</button>
+                    <button class="btn decline-btn" data-id="${note.username}">Отклонить</button>
                     </div>
                 </div>
                 `

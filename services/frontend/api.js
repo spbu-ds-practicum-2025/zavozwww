@@ -20,7 +20,7 @@ class Api {
                 localStorage.setItem("token", data.access_token);
                 localStorage.setItem("refresh_token", data.refresh_token);
                 return true;
-            } e
+            }
             return false;
         } catch {
             return false;
@@ -43,6 +43,9 @@ class Api {
         if(token){
             fetchInit.headers["Authorization"] = `Bearer ${token}`;
         }
+        
+        console.log(`Request: ${fetchInit.method || 'GET'} ${url}`, fetchInit);
+
         try {
             let response = await fetch(url, fetchInit);
 
@@ -60,15 +63,17 @@ class Api {
                 }
             }
 
-            let data = {};
             const text = await response.text();
-            if(!response.ok && response.status != 500) {
-                throw new Error(data.message || response.statusText);
-            }
+            let data = {};
+
             try {
                 data = text ? JSON.parse(text) : {};
             } catch (error) {
                 throw new Error("Server returned non-JSON response");
+            }
+
+            if (!response.ok) {
+                throw new Error(data.message || response.statusText);
             }
             
             return data;
@@ -130,30 +135,30 @@ class Api {
     }
 
     async searchFriend(Name) {
-        return this.request(`/friends/search?name=${encodeURIComponent(Name)}`, {
+        return this.request(`/friends/searchFriends`, {
             method: "POST",
-            body: JSON.stringify({ target_user_id: Name }),
+            body: JSON.stringify({ username: Name }),
         });
     }
 
-    async addFriend(Name) {
-        return this.request("/friends/request", {
+    async addFriend(FromName, ToName) {
+        return this.request("/friends/requests", {
            method: "POST",
-           body: JSON.stringify({target_user_id: Name}),
-       });
+           body: JSON.stringify({from_username: FromName, to_name: ToName}),
+       }, "http://localhost:8082/social");
     }
 
     async acceptRequest(userFrom) {
-        return this.request("/friends/accept/request_id", {
+        return this.request("/friends/requests/accept", {
             method: "POST",
-            body: JSON.stringify({user_id: userFrom}),
-        });
+            body: JSON.stringify({username: userFrom}),
+        }, "http://localhost:8082/social");
     }
 
     async declineRequest(userFrom) {
-        return this.request("/friends/decline/request_id", {
+        return this.request("/friends/req/request_id", {
             method: "POST",
-            body: JSON.stringify({user_id: userFrom}),
+            body: JSON.stringify({username: userFrom}),
         });
     }
 
@@ -175,17 +180,21 @@ class Api {
     }
 
     async getFriends() {
-        const data = await this.request("/friends");
+        const data = await this.request("/friends", {}, "http://localhost:8082/social");
         return data;
     }
 
-    async setProfile(Firstname, Lastname, Age, City, Info) {
+    async setProfile(Username, Firstname, Lastname, Age, City, Info) {
         return this.request("/profile", {
             method: "POST",
-            body: JSON.stringify({first_name: Firstname, last_name: Lastname, age: Age, city: City, info: Info}),
+            body: JSON.stringify({username: Username, first_name: Firstname, last_name: Lastname, age: Age, city: City, info: Info}),
         });
     }
 
+    async getRatedMovies() {
+        const data = await this.request("/ratedFilms");
+        return data;
+    }
 }
 
 const api = new Api();

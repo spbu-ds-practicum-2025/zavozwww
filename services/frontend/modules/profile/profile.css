@@ -2,6 +2,8 @@
     position: absolute;
     z-index: 1000;
     right: 20px;
+    max-width: 20em;
+    width: 100%;
     opacity: 0;
     transform: translateX(400px);
     transition: all 0.3s ease;

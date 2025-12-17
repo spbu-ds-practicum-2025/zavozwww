@@ -9,6 +9,7 @@
 @import url("modules/temp-notice/temp-notice.css");
 @import url("modules/navbar/navbar.css");
 @import url("modules/setProfile/setProfile.css");
+@import url("modules/ratingLIst/ratingList.css");
 
 * {
     padding: 0;
@@ -43,4 +44,9 @@ button {
     font-family: inherit;
     font-size: inherit;
     line-height: inherit;
+}
+
+.main-page {
+    margin: 0px 64px;
+    margin-bottom: 2em;
 }

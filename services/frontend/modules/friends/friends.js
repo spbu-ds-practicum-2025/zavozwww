@@ -1,8 +1,10 @@
 class FriendsManager {
-    render() {
+    render(username) {
+        this.username = username;
+
         const mainContent = document.getElementById("main-content");
         mainContent.innerHTML = `
-            <div class="friends-page">
+            <div class="main-page friends-page">
                 <h1 class="friends-page__title">Поиск пользователей</h1>
                 <div class="search-box">
                     <input type="text" id="friends-search" class="search-box__input" placeholder="Логин пользователя...">
@@ -32,8 +34,11 @@ class FriendsManager {
     async search() {
         let searchQuery = document.getElementById("friends-search").value;
         try{
+            if(!searchQuery) {
+                tempNotice.error("Я не умею читать мысли (пока). Напишите никнейм Вашего друга");
+            }
             let data = await api.searchFriend(searchQuery);
-            this.renderSearchFriends(data.friends);
+            this.renderSearchFriends(data);
         } catch(error) {
             tempNotice.error("Ошибка, попробуйте еще раз через некоторое время");
             console.log(`Error: ${error.message}`);
@@ -50,24 +55,10 @@ class FriendsManager {
             return;
         }
 
-        /*
-            <p class="friend-card__title">Имя: <span class="friend-card__data">${friend.name}</span></p>
-            <p class="friend-card__title">Дата регистрации: <span class="friend-card__data">${friend.regDate}</span></p>
-            <div class="profile-activity profile-acticity-friendsPage">
-                <div class="profile-stat profile-stat-friendsPage">
-                    <span class="categorie">Оцененных фильмов:</span>
-                    <span class="number">${friend.countRateFilms}</span>
-                </div>
-                <div class="profile-stat profile-stat-friendsPage">
-                    <span class="categorie">Количество друзей:</span>
-                    <span class="number">${friend.countFriends}</span>
-                </div>
-            </div>
-        */
-
         yourFriends.innerHTML = friends.map(friend => 
             `
             <div class="friend-card">
+                <p class="friend-card__title">Никнейм: <span class="friend-card__data">${friend.username}</span></p>
                 <p class="friend-card__title">Имя: <span class="friend-card__data">${friend.first_name}</span></p>
                 <p class="friend-card__title"> Фамилия: <span class="friend-card__data">${friend.last_name}</span></p>
                 <p class="friend-card__title">Город: <span class="friend-card__data">${friend.city}</span></p>
@@ -91,20 +82,28 @@ class FriendsManager {
         results.innerHTML = friendsArray.map(friend => 
             `
             <div class="friend-card">
+                <p class="friend-card__title">Никнейм: <span class="friend-card__data">${friend.username}</span></p>
                 <p class="friend-card__title">Имя: <span class="friend-card__data">${friend.first_name}</span></p>
                 <p class="friend-card__title"> Фамилия: <span class="friend-card__data">${friend.last_name}</span></p>
                 <p class="friend-card__title">Город: <span class="friend-card__data">${friend.city}</span></p>
                 <p class="friend-card__title">Возвраст: <span class="friend-card__data">${friend.age}</span></p>
                 <p class="friend-card__title">О Вас: <span class="friend-card__data">${friend.info}</span></p>
-                <button class="friend-card__add-btn" onclick="friendsManager.sendRequest(${friend.name})">Добавить в друзья</button>
+                <button class="friend-card__add-btn" data-username="${friend.username}">Добавить в друзья</button>
             </div>
             `
         ).join("");
+        
+        results.addEventListener("click", (event) => {
+            if (event.target.classList.contains("friend-card_add-btn")) {
+                const username = event.target.dataset.username;
+                friendsManager.sendRequest(username);
+            }
+        });
     }
 
-    async sendRequest(name) {
+    async sendRequest(to_username) {
         try {
-            await api.addFriend(name);
+            await api.addFriend(this.username, to_username);
             tempNotice.success("Заявка отправлена");
         } catch(error) {
             tempNotice.error("Ошибка, попробуйте еще раз через некоторое время");

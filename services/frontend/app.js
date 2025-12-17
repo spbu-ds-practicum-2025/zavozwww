@@ -7,6 +7,7 @@ class App {
         this.token = localStorage.getItem("token");
         this.notificationSocket = null;
         this.currentPage = "search";
+        this.noticeManager = new NoticeManager(null);
         this.init();
     }
 
@@ -33,7 +34,7 @@ class App {
         if (this.token) {
             this.notificationSocket = await this.connectNotification();
             if (this.notificationSocket) {
-                this.noticeManager = new NoticeManager(this.notificationSocket);
+                this.noticeManager.socket = this.notificationSocket; 
             }
         }
         document.addEventListener("click", (event) => {
@@ -51,8 +52,8 @@ class App {
 
     async loadPages(name){
         let data = await api.getProfile();
-        if(!data.first_name || !data.last_name || !data.age || !data.city || !data.info){
-            profileManager.showProfileForm();
+        if(data.first_name === "Unknown" || data.last_name == "Unknown" || !data.city || !data.info){
+            profileManager.showProfileForm(data.username);
         }
         if(name != "profile" && name != "notice"){
             this.currentPage = name;
@@ -72,7 +73,10 @@ class App {
                 profileManager.render(data);
                 break;
             case "friends":
-                friendsManager.render();
+                friendsManager.render(data.username);
+                break;
+            case "ratingList":
+                ratingListManager.render();
                 break;
         }
     }
@@ -87,3 +91,4 @@ class App {
 }
 
 const app = new App();
+
