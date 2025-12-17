@@ -153,10 +153,10 @@ class Api {
         return data;
     }
 
-    async acceptRequest(Request_id) {
+    async acceptRequest(FromName, ToName) {
         return this.request("/friends/requests/accept", {
             method: "POST",
-            body: JSON.stringify({request_id: Request_id}),
+            body: JSON.stringify({from_username: FromName, to_username: ToName}),
         }, "http://localhost:8082/social");
     }
 

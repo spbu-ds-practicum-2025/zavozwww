@@ -9,7 +9,7 @@ class LoaderManager {
         if(this.countRequest == 1) {
             this.timeout = setTimeout(() => {
                 this.loader.classList.remove("hidden");
-            }, 200);
+            }, 500);
         }
     }
 

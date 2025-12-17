@@ -45,7 +45,9 @@ class NoticeManager {
         }
     }
 
-    async render() {
+    async render(username) {
+        this.username = username;
+
         await this.getNotifications();
         console.log("render");
         if(this.notifications.length == 0){
@@ -67,10 +69,10 @@ class NoticeManager {
         if(this.notifications.length > 0){
             notice.innerHTML = this.notifications.map(note => 
                 `
-                <div id="request-${note.from_username}" class="notice-card">
+                <div id="request-${note.request_id}" class="notice-card">
                     <p class="notice-card__message">Вам запрос на дружбу от <span class="from-request">${note.from_username} </span><span class="date-request">${new Date(note.created_at).toLocaleDateString()}</span></p>
                     <div class="notice-card__actions">
-                    <button class="btn accept-btn" data-id="${note.request_id}">Принять</button>
+                    <button class="btn accept-btn" data-id="${note.request_id}" data-from="${note.from_username}">Принять</button>
                     <button class="btn decline-btn" data-id="${note.request_id}">Отклонить</button>
                     </div>
                 </div>
@@ -81,8 +83,9 @@ class NoticeManager {
             notice.querySelectorAll(".accept-btn").forEach(btn => {
                 btn.addEventListener("click", (event) => {
                     const userId = event.currentTarget.dataset.id;
+                    const fromUsername = event.currentTarget.dataset.from;
                     event.stopPropagation();
-                    this.acceptRequest(userId);
+                    this.acceptRequest(userId, fromUsername);
                 });
             });
             notice.querySelectorAll(".decline-btn").forEach(btn => {
@@ -121,11 +124,11 @@ class NoticeManager {
         }, 0);
     }
 
-    async acceptRequest(userFrom){
+    async acceptRequest(requestID, fromUsername){
         try {
-            await api.acceptRequest(userFrom);
-            this.notifications = this.notifications.filter(note => note.from_username !== userFrom);
-            document.getElementById(`request-${userFrom}`).remove();
+            await api.acceptRequest(fromUsername, this.username);
+            this.notifications = this.notifications.filter(note => note.request_id !== requestID);
+            document.getElementById(`request-${requestID}`).remove();
             tempNotice.success("Вы приняли запрос на дружбу"); 
             this.render();
         } catch(error) {
@@ -134,11 +137,11 @@ class NoticeManager {
         }
     }
 
-    async declineRequest(userFrom){
+    async declineRequest(requestID){
         try {
-            await api.declineRequest(userFrom);
-            this.notifications = this.notifications.filter(note => note.from_username !== userFrom);
-            document.getElementById(`request-${userFrom}`).remove();
+            await api.declineRequest(requestID);
+            this.notifications = this.notifications.filter(note => note.request_id !== requestID);
+            document.getElementById(`request-${requestID}`).remove();
             tempNotice.success("Вы отклонили запрос на дружбу"); 
             this.render();
         } catch(error) {

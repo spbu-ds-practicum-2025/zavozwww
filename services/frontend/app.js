@@ -73,7 +73,7 @@ class App {
                 recomendationManager.render();
                 break;
             case "notice":
-                this.noticeManager.render();
+                this.noticeManager.render(data.username);
                 break;
             case "profile":
                 profileManager.render(data);
