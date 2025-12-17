@@ -1,25 +1,62 @@
 class NoticeManager {
-    constructor(notificationSocket) {
-        this.socket = notificationSocket;
+    constructor() {
+        // this.socket = notificationSocket;
         this.haveNotice = false;
         this.token = localStorage.getItem("token");
-        this.notifications = new Map();
+        this.notifications = [];
+        this.waitRequest = false;
+        /*
         this.socket.onmessage = (event) => {
             const notification = JSON.parse(event.data);
             document.querySelector(".navbar__content__pages__notice").classList.add("haveNotice");
             this.notifications.set(notification.username, notification);
         }   
+        */
     }
 
-    render() {
+    start() {
+        if(this.waitRequest) {
+            return;
+        }
+
+        this.getNotifications();
+
+        this.waitRequest = setInterval(() => {
+            this.getNotifications();
+        }, 5000);
+    }
+
+    stop() {
+        if (this.waitRequest) {
+            clearInterval(this.waitRequest);
+            this.waitRequest = null;
+        }
+    }
+
+    async getNotifications() {
+        try {
+            const data = await api.getNotice(); 
+            const newNotifications = data.notifications || [];
+
+            if (JSON.stringify(newNotifications) !== JSON.stringify(this.notifications)) {
+                this.notifications = newNotifications;
+                document.querySelector(".navbar__content__pages__notice").classList.add("haveNotice");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+
+    async render() {
+        await this.getNotifications();
         console.log("render");
-        if(this.notifications.size == 0){
+        if(this.notifications.length == 0){
             document.querySelector(".navbar__content__pages__notice").classList.remove("haveNotice");
         }
         if (document.querySelector(".notice-container")) {
-            if(this.notifications.size == 0) {
+            if(this.notifications.length == 0) {
                 document.querySelector(".notice-container").innerHTML = `
-                    <p class="notice-card__message">У вас нет уведомлений</p>
+                    <p class="notice-card__message">У вас нет уведомлений!</p>
                 `
             }
             console.log("return");
@@ -29,8 +66,8 @@ class NoticeManager {
         const notice = document.createElement("div");
         console.log("create");
         notice.classList.add("notice-container");
-        if(this.notifications.size > 0){
-            notice.innerHTML = Array.from(this.notifications.values()).map(note => 
+        if(this.notifications.length > 0){
+            notice.innerHTML = this.notifications.map(note => 
                 `
                 <div id="request-${note.username}" class="notice-card">
                     <p class="notice-card__message">Вам запрос на дружбу от <span class="from-request">${note.username}</span><span class="date-request">${new Date(note.createDate).toLocaleDateString()}</span></p>
@@ -42,7 +79,6 @@ class NoticeManager {
                 `
             ).join("");
             console.log(notice);
-            console.log("map");
 
             notice.querySelectorAll(".accept-btn").forEach(btn => {
                 btn.addEventListener("click", (event) => {
@@ -60,7 +96,7 @@ class NoticeManager {
             });
         } else {
             notice.innerHTML = `
-                <p class="notice-card__message">У вас нет уведомлений</p>
+                <p class="notice-card__message">У вас нет уведомлений!</p>
             `
         }
 

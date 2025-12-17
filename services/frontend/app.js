@@ -5,12 +5,13 @@ class App {
         }
         this.currentPage = localStorage.getItem("currentPage");
         this.token = localStorage.getItem("token");
-        this.notificationSocket = null;
+        // this.notificationSocket = null;
         this.currentPage = "search";
-        this.noticeManager = new NoticeManager(null);
+        this.noticeManager = new NoticeManager();
         this.init();
     }
 
+    /*
     async connectNotification() {
         try {
             const ws = new WebSocket(`/users/notifications?token=${this.token}`);
@@ -27,16 +28,20 @@ class App {
             return null;
         }
     }
-
+    */
 
     async init(){   
         localStorage.setItem("currentPage", this.currentPage);
+        
+        /*
         if (this.token) {
             this.notificationSocket = await this.connectNotification();
             if (this.notificationSocket) {
                 this.noticeManager.socket = this.notificationSocket; 
             }
         }
+        */
+
         document.addEventListener("click", (event) => {
             const clickedPage = event.target.closest("[data-page]");
             if(clickedPage){
@@ -47,6 +52,7 @@ class App {
 
         if (this.token) {
             this.loadPages(this.currentPage);
+            this.noticeManager.start();
         }
     }
 

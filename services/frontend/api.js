@@ -148,6 +148,12 @@ class Api {
        }, "http://localhost:8082/social");
     }
 
+    async getNotice() {
+        const data = await api.request("/friends/requests");
+        return data;
+
+    }
+
     async acceptRequest(userFrom) {
         return this.request("/friends/requests/accept", {
             method: "POST",
