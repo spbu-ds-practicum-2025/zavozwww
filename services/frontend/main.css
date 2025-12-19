@@ -19,6 +19,7 @@
 
 body {
     background-color: var(--dark-grey);
+    transition: background-color 0.3s, color 0.3s;
 }
 
 [data-page] {

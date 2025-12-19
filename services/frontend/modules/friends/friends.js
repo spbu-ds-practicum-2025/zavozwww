@@ -14,6 +14,7 @@ class FriendsManager {
                     <h2 class="friends-page__title_small">Ваши друзья</h2>
                     <div id="your-friends" class="friends-page__result friends-page__your-friends"></div>
                 </div>
+                <h1 class="friends-page__results__title hidden">Результаты поиска</h1>
                 <div id="search-friends-results" class="results friends-page__results"></div>
             </div>
         `
@@ -36,6 +37,7 @@ class FriendsManager {
         try{
             if(!searchQuery) {
                 tempNotice.error("Я не умею читать мысли (пока). Напишите никнейм Вашего друга");
+                return;
             }
             let data = await api.searchFriend(searchQuery);
             this.renderSearchFriends(data);
@@ -46,7 +48,9 @@ class FriendsManager {
     }
 
     async renderYourFriends(){
+        document.querySelector(".friends-page__results__title").classList.remove("hidden");
         let friends = await api.getFriends();
+        console.log("Your friends:", friends);
         const yourFriends = document.getElementById("your-friends");
         if(friends.length == 0){
             yourFriends.innerHTML = `

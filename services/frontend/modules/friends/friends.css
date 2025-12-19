@@ -20,6 +20,13 @@
     gap: 1em;
 }
 
+.friends-page__results__title {
+    font: var(--font-small-title);
+    color: var(--light-grey);
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+}
+
 .friends-page__result {
     border-bottom: 1px solid var(--light-grey);
     margin-bottom: 1em;

@@ -26,7 +26,8 @@ class ProfileManager {
                     <p class="profile__title">Возвраст: <span class="profile__data">${this.currentUser.age}</span></p>
                     <p class="profile__title">О Вас: <span class="profile__data">${this.currentUser.info}</span></p>
                 </div>
-                <button id="quit" class="quit">Выйти</button>
+                <button id="change" class="change-btn">Изменить</button>
+                <button id="quit" class="quit-btn">Выйти</button>
             </div>
         `
 
@@ -39,6 +40,10 @@ class ProfileManager {
         document.getElementById("quit").addEventListener("click", () => {
             this.logout();
         });
+
+        document.getElementById("change").addEventListener("click", () => {
+            this.showProfileForm(this.currentUser.username);
+        })
 
         const closeHandler = (event) => {
             if(!event.target.closest(".profile-container")) {
@@ -86,7 +91,7 @@ class ProfileManager {
                     <input type="text" id="city" placeholder="Город" required>
                 </div>
                 <textarea class="about" placeholder="Расскажите о себе"></textarea>
-                <button id="save" type="button" class="save-btn">Сохранить</button>
+                <button id="save" class="save-btn">Сохранить</button>
             </div>
         `
 

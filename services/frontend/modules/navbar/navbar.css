@@ -8,7 +8,7 @@
 .navbar__content__pages {
     display: flex;
     align-items: center;
-    gap: 3.5em;
+    gap: 3em;
 
     color: var(--light-grey);
     font: var(--font-button);
@@ -16,6 +16,7 @@
 
 .page svg {
     fill: var(--light-grey);
+    background-color: var(--dark-grey);
 }
 
 .page svg path {
@@ -23,10 +24,21 @@
     stroke-width: 1px;
 }
 
+.sun {
+    fill: var(--light-grey);
+    background-color: var(--dark-grey);
+}
+
+.moon {
+    fill: var(--grey);
+    background-color: var(--dark-grey);
+}
+
 .page {
     padding: 0.5em;
     background-color: var(--dark-grey);
     border-radius: 5px;
+    cursor: pointer;
     transition: filter 0.1s ease;
 }
 

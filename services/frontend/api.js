@@ -1,6 +1,6 @@
 class Api {
     constructor(){
-        this.apiURL = "http://localhost:8080/filmbuddy";
+        this.apiURL = "http://localhost/filmbuddy";
     }
 
     async refresh(){
@@ -120,18 +120,38 @@ class Api {
     }
 
     async searchMovie(searchQuery, genre) {
-        return this.request(`/search?query=${encodeURIComponent(searchQuery)}&genre=${genre}`);
+        return this.request("/search", {
+            method: "POST",
+            body: JSON.stringify({
+                title: searchQuery,
+                genre: genre === "all" ? "" : genre
+            })
+        }, "http://localhost/recsys");
     }
 
     async rating(ID, Rating, Message){
-        return this.request(`/movies/${ID}/rating`, {
+        return this.request("/ratings", {
                     method: "POST",
-                    body: JSON.stringify({ rating: Rating, review: Message }),
-                });
+                    body: JSON.stringify({ film_id: ID, grade: Rating, review: Message, username: "" }),
+                }, "http://localhost/social");
     }
 
     async recomendation() {
-        return this.request("/recomendations");
+        try {
+            const ratings = await this.getRatedMovies();
+            const grades = ratings.map(r => ({
+                film_id: r.film_id,
+                grade: r.grade
+            }));
+
+            return this.request("/recommend", {
+                method: "POST",
+                body: JSON.stringify(grades)
+            }, "http://localhost/recsys");
+        } catch (error) {
+            console.error("Failed to get recommendations:", error);
+            return [];
+        }
     }
 
     async searchFriend(Name) {
@@ -145,11 +165,11 @@ class Api {
         return this.request("/friends/requests", {
            method: "POST",
            body: JSON.stringify({from_username: FromName, to_username: ToName}),
-       }, "http://localhost:8082/social");
+       }, "http://localhost/social");
     }
 
     async getNotice() {
-        const data = await api.request("/friends/requests", {}, "http://localhost:8082/social");
+        const data = await api.request("/friends/requests", {}, "http://localhost/social");
         return data;
     }
 
@@ -157,14 +177,14 @@ class Api {
         return this.request("/friends/requests/accept", {
             method: "POST",
             body: JSON.stringify({from_username: FromName, to_username: ToName}),
-        }, "http://localhost:8082/social");
+        }, "http://localhost/social");
     }
 
     async declineRequest(Request_id) {
         return this.request("/friends/requests/reject", {
             method: "POST",
             body: JSON.stringify({request_id: Request_id}),
-        }, "http://localhost:8082/social");
+        }, "http://localhost/social");
     }
 
     async logout(refreshToken){
@@ -185,7 +205,7 @@ class Api {
     }
 
     async getFriends() {
-        const data = await this.request("/friends", {}, "http://localhost:8082/social");
+        const data = await this.request("/friends", {}, "http://localhost/social");
         return data;
     }
 
@@ -197,7 +217,20 @@ class Api {
     }
 
     async getRatedMovies() {
-        const data = await this.request("/ratedFilms");
+        const data = await this.request("/ratings", {}, "http://localhost/social");
+        return data;
+    }
+    async getFilm(filmID) {
+        const data = await this.request(`/movie/${filmID}`, {}, "http://localhost/recsys");
+        console.log("FILM DATA: ", data);
+        return data.movie_title;
+    }
+
+    async getMoviesBatch(filmIDs) {
+        const data = await this.request("/movies/batch", {
+            method: "POST",
+            body: JSON.stringify({ movie_ids: filmIDs })
+        }, "http://localhost/recsys");
         return data;
     }
 }

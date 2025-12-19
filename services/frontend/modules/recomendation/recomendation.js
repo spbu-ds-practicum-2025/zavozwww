@@ -11,7 +11,17 @@ class RecomendationManager {
     }
 
     async render() {
-        let movies = await api.recomendation();
+        let data = await api.recomendation();
+        let movies = data.map(item => ({
+            id: item.movie_id,
+            title: item.movie_title,
+            imageSrc: item.poster_url,
+            genres: item.genre,
+            year: item.year, 
+            rating: item.rating,
+            description: item.description
+        }));
+
         const mainContent = document.getElementById("main-content");
         mainContent.innerHTML = `
             <div class="main-page">
@@ -34,7 +44,7 @@ class RecomendationManager {
                         <span class="movie-card__genres">${movie.genres}</span>
                     </div>
                     <div class="movie-card-rate">
-                        <span class="movie-card__raiting"> Оценка: ${movie.rating ? movie.rating.toFixed(1): "нет оценок"}</span><br>
+                        <span class="movie-card__raiting"> Оценка: ${movie.rating ? movie.rating.toFixed(1) + "&#9733;": "нет оценок"}</span><br>
                         <button class="movie-card__rate-btn" onclick="searchManager.showRate(${movie.id})">Оценить</button>
                     </div>
                 </div>

@@ -21,23 +21,29 @@
     background-color: var(--grey);
     border-radius: 0.65em;
     display: grid;
-    grid-template-columns: repeat(1fr, 3);
-    justify-content: space-between;
+    grid-template-columns: 1fr auto auto;
+    gap: 1em;
+    align-items: center;
 }
 
 .rated-movies__results__film__title {
     font: var(--font-small-title);
+    min-width: 0;
+    overflow-wrap: break-word;
 }
 
 .rated-movies__results__film__grade {
     font: var(--font-text);
+    white-space: nowrap;
 }
 
 .rated-movies__results__film__createdAt {
     font: var(--font-text);
+    white-space: nowrap;
 }
 
 .rated-movies__results__film__review {
     font: var(--font-text);
     grid-column: span 3;
+    margin-top: 1em;
 }

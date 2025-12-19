@@ -79,7 +79,18 @@ class SearchManager{
 
         try{
             let data = await api.searchMovie(searchQuery, genre);
-            this.renderMovies(data.movies);
+            
+            const movies = data.map(item => ({
+                id: item.movie_id,
+                title: item.movie_title,
+                imageSrc: item.poster_url,
+                genres: item.genre,
+                year: item.year, 
+                rating: item.rating,
+                description: item.description
+            }));
+
+            this.renderMovies(movies);
         } catch(error) {
             tempNotice.error("Ошибка поиска, попробуйте еще раз через некоторое время");
             console.log(`Error: ${error.message}`);
@@ -115,7 +126,7 @@ class SearchManager{
                         <span class="movie-card__genres">${movie.genres}</span>
                     </div>
                     <div class="movie-card-rate">
-                        <span class="movie-card__raiting"> Оценка: ${movie.rating ? movie.rating.toFixed(1): "нет оценок"}</span><br>
+                        <span class="movie-card__raiting"> Оценка: ${movie.rating ? movie.rating.toFixed(1) + "&#9733;": "нет оценок"}</span><br>
                         <button class="movie-card__rate-btn" onclick="searchManager.showRate(${movie.id})">Оценить</button>
                     </div>
                 </div>
@@ -129,6 +140,7 @@ class SearchManager{
                 let film = movies.find((item) => item.id === parseInt(movie.dataset.movieId));
                 this.currentSearchQuery = document.getElementById("film-search").value;
                 this.currentGenre = document.getElementById("genres").value;
+                console.log(film);
                 this.filmManager.render(film, searchManager);
             }
         })

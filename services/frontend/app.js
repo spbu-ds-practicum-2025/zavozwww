@@ -50,6 +50,18 @@ class App {
             }
         });
 
+        document.getElementById("theme-toggle").addEventListener('click', () => {
+            document.body.classList.toggle("light-theme");
+            document.querySelector(".sun").toggle("hidden");
+            document.querySelector(".moon").toggle("hidden");
+            const isDark = document.body.classList.contains("light-theme");
+            localStorage.setItem("theme", isDark ? "light" : "dark");
+        });
+
+        if (localStorage.getItem("theme") == "light") {
+            document.body.classList.add("light-theme");
+        }
+
         if (this.token) {
             this.loadPages(this.currentPage);
             this.noticeManager.start();
@@ -86,14 +98,6 @@ class App {
                 break;
         }
     }
-
-    renderNotificationsPage() {
-        document.getElementById("main-content").innerHTML = `
-            <h1>Уведомления</h1>
-            <p>Страница уведомлений в разработке</p>
-        `;
-    }
-
 }
 
 const app = new App();

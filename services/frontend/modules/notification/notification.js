@@ -21,7 +21,7 @@ class NoticeManager {
 
         this.waitRequest = setInterval(() => {
             this.getNotifications();
-        }, 5000);
+        }, 30000);
     }
 
     stop() {
