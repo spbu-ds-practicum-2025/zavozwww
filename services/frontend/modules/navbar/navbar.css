@@ -15,6 +15,7 @@
 }
 
 .page svg {
+    padding: 0;
     fill: var(--light-grey);
     background-color: var(--dark-grey);
 }
@@ -44,4 +45,10 @@
 
 .page:hover {
     filter: brightness(130%);
+}
+
+.page-group {
+    display: flex;
+    align-items: center;
+    gap: 1em;
 }

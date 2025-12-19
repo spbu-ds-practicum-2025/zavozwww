@@ -52,14 +52,16 @@ class App {
 
         document.getElementById("theme-toggle").addEventListener('click', () => {
             document.body.classList.toggle("light-theme");
-            document.querySelector(".sun").toggle("hidden");
-            document.querySelector(".moon").toggle("hidden");
+            document.querySelector(".sun").classList.toggle("hidden");
+            document.querySelector(".moon").classList.toggle("hidden");
             const isDark = document.body.classList.contains("light-theme");
             localStorage.setItem("theme", isDark ? "light" : "dark");
         });
 
         if (localStorage.getItem("theme") == "light") {
             document.body.classList.add("light-theme");
+            document.querySelector(".sun").classList.remove("hidden"); 
+            document.querySelector(".moon").classList.add("hidden");
         }
 
         if (this.token) {
