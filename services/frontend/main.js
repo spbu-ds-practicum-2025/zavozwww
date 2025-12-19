@@ -7,5 +7,4 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         const authManager = new AuthManager();
     }
-    console.log('App start');
 });

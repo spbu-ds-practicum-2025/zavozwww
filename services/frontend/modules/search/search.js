@@ -140,7 +140,6 @@ class SearchManager{
                 let film = movies.find((item) => item.id === parseInt(movie.dataset.movieId));
                 this.currentSearchQuery = document.getElementById("film-search").value;
                 this.currentGenre = document.getElementById("genres").value;
-                console.log(film);
                 this.filmManager.render(film, searchManager);
             }
         })
@@ -211,7 +210,6 @@ class SearchManager{
         stars.forEach((item, index) => {
             item.addEventListener("click", () => {
                 rating = index + 1;
-                console.log(index + 1);
                 updateClass(rating);
             }
             );

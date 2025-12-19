@@ -19,7 +19,6 @@ class RatingList {
         `
         try {
             const ratedMovies = await api.getRatedMovies();
-            console.log("DATA: ", ratedMovies);
             const results = document.querySelector(".rated-movies__results");
             if(ratedMovies.length === 0) {
                 results.innerHTML = `

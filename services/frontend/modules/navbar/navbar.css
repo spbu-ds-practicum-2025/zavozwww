@@ -1,3 +1,5 @@
+@import url("../../main.css");
+
 .navbar__content {
     display: flex;
 
@@ -17,22 +19,19 @@
 .page svg {
     padding: 0;
     fill: var(--light-grey);
-    background-color: var(--dark-grey);
 }
 
-.page svg path {
-    stroke: var(--light-grey);
-    stroke-width: 1px;
-}
-
-.sun {
-    fill: var(--light-grey);
-    background-color: var(--dark-grey);
-}
-
+.sun,
 .moon {
-    fill: var(--grey);
-    background-color: var(--dark-grey);
+    pointer-events: none;
+    fill: var(--light-grey);
+    width: 24px;
+    height: 24px;
+}
+
+.sun path,
+.moon path {
+    pointer-events: none;
 }
 
 .page {
@@ -40,7 +39,7 @@
     background-color: var(--dark-grey);
     border-radius: 5px;
     cursor: pointer;
-    transition: filter 0.1s ease;
+    transition: filter 0.1s ease, background-color 0.3s, color 0.3s;
 }
 
 .page:hover {
@@ -51,4 +50,19 @@
     display: flex;
     align-items: center;
     gap: 1em;
+}
+
+.theme-toggle {
+    padding: 0.5em;
+    background-color: var(--dark-grey);
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: filter 0.1s ease, background-color 0.3s, color 0.3s;
+}
+
+.theme-toggle:hover {
+    filter: brightness(130%);
 }

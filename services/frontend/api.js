@@ -222,7 +222,7 @@ class Api {
     }
     async getFilm(filmID) {
         const data = await this.request(`/movie/${filmID}`, {}, "http://localhost/recsys");
-        console.log("FILM DATA: ", data);
+        // console.log("FILM DATA: ", data);
         return data.movie_title;
     }
 

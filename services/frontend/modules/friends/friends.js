@@ -50,7 +50,6 @@ class FriendsManager {
     async renderYourFriends(){
         document.querySelector(".friends-page__results__title").classList.remove("hidden");
         let friends = await api.getFriends();
-        console.log("Your friends:", friends);
         const yourFriends = document.getElementById("your-friends");
         if(friends.length == 0){
             yourFriends.innerHTML = `

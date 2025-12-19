@@ -91,7 +91,6 @@ class AuthManager {
         if (email && password) {
             //send to server
             try {
-                console.log(email);
                 let data = await api.login(email, password);
                 localStorage.setItem("token", data.access_token);
                 this.token = data.access_token;

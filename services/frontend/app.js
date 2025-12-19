@@ -50,18 +50,35 @@ class App {
             }
         });
 
-        document.getElementById("theme-toggle").addEventListener('click', () => {
-            document.body.classList.toggle("light-theme");
-            document.querySelector(".sun").classList.toggle("hidden");
-            document.querySelector(".moon").classList.toggle("hidden");
-            const isDark = document.body.classList.contains("light-theme");
-            localStorage.setItem("theme", isDark ? "light" : "dark");
-        });
+        const themeBtn = document.getElementById("theme-toggle");
 
-        if (localStorage.getItem("theme") == "light") {
-            document.body.classList.add("light-theme");
-            document.querySelector(".sun").classList.remove("hidden"); 
-            document.querySelector(".moon").classList.add("hidden");
+        if (!themeBtn.dataset.hasListener) {
+            if (localStorage.getItem("theme") == "light") {
+                document.body.classList.add("light-theme");
+                document.querySelector(".sun").classList.add("hidden"); 
+                document.querySelector(".moon").classList.remove("hidden");
+            } else {
+                document.body.classList.remove("light-theme");
+                document.querySelector(".sun").classList.remove("hidden"); 
+                document.querySelector(".moon").classList.add("hidden");
+            }
+
+            themeBtn.addEventListener("click", () => {
+                if (!document.body.classList.contains("light-theme")) {
+                    document.body.classList.add("light-theme");
+                    document.querySelector(".sun").classList.add("hidden"); 
+                    document.querySelector(".moon").classList.remove("hidden");
+                } else {
+                    document.body.classList.remove("light-theme");
+                    document.querySelector(".sun").classList.remove("hidden"); 
+                    document.querySelector(".moon").classList.add("hidden");
+                }
+
+                const isLight = document.body.classList.contains("light-theme");
+                localStorage.setItem("theme", isLight ? "light" : "dark");
+            });
+            
+            themeBtn.dataset.hasListener = "true";
         }
 
         if (this.token) {

@@ -49,7 +49,7 @@ class NoticeManager {
         this.username = username;
 
         await this.getNotifications();
-        console.log("render");
+        
         if(this.notifications.length == 0){
             document.querySelector(".navbar__content__pages__notice").classList.remove("haveNotice");
         }
@@ -59,12 +59,12 @@ class NoticeManager {
                     <p class="notice-card__message">У вас нет уведомлений!</p>
                 `
             }
-            console.log("return");
+            
             return;
         }
         
         const notice = document.createElement("div");
-        console.log("create");
+        
         notice.classList.add("notice-container");
         if(this.notifications.length > 0){
             notice.innerHTML = this.notifications.map(note => 
@@ -78,7 +78,7 @@ class NoticeManager {
                 </div>
                 `
             ).join("");
-            console.log(notice);
+            
 
             notice.querySelectorAll(".accept-btn").forEach(btn => {
                 btn.addEventListener("click", (event) => {
@@ -102,7 +102,6 @@ class NoticeManager {
         }
 
         document.getElementById("navbar").after(notice);
-        console.log("add");
         setTimeout(() => {
             notice.classList.add("show-notice");
         }, 10);

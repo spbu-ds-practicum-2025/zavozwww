@@ -21,8 +21,8 @@
     --font-button-sec: 300 16px var(--text-font-family);
 }
 
-body.dark-theme {
-    --dark-grey: #EAF4F4;
+body.light-theme {
+    --dark-grey: #F5F5F5;
     --light-grey: #2A2827;
     --dark-turquoise: #014651;
     --grey: #DDDEDE;

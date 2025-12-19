@@ -1,7 +1,7 @@
 class ProfileManager {
     constructor() {
         this.currentUser = undefined;
-        console.log(this.currentUser);
+        
     }
 
     async getUser() {
@@ -13,7 +13,7 @@ class ProfileManager {
         }
        
         this.currentUser = data;
-        console.log(this.currentUser);
+        
         const profile = document.createElement("div");
         profile.classList.add("profile-container");
         profile.innerHTML= `
@@ -32,7 +32,7 @@ class ProfileManager {
         `
 
         document.getElementById("navbar").after(profile);
-        console.log("add");
+        
         setTimeout(() => {
             profile.classList.add("show-profile");
         }, 10);
@@ -98,7 +98,7 @@ class ProfileManager {
         document.body.appendChild(profileFormContainer);
 
         document.getElementById("save").addEventListener("click", () => {
-            console.log("CLICK");
+            
             this.setProfile(username);
         });
     }
@@ -111,18 +111,18 @@ class ProfileManager {
             const city = document.getElementById("city").value; 
             const about = document.querySelector(".about").value;
 
-            console.log("Данные формы:", { firstname, secondname, age, city, about });
+            
 
             if(firstname && secondname && age && city) {
-                console.log("Отправка запроса setProfile...");
+                
                 await api.setProfile(username, firstname, secondname, age, city, about);
-                console.log("Запрос setProfile выполнен успешно");
+                
                 
                 document.body.removeChild(document.querySelector(".setProfile-container"));
                 app.loadPages("search");
                 tempNotice.success("Данные профиля сохранены!");
             } else {
-                console.log("Проверка полей не пройдена");
+                
                 tempNotice.error("Заполните обязательные поля (Имя, Фамилия, Возраст, Город)");
             }
         } catch(error) {
